@@ -2,12 +2,12 @@ version: '3.7'
 
 services:
   php:
-    build:./app
+    build: ./app
     container_name: ${PROJECT_NAME}_app
     volumes:
       - ./app/src:/var/www/html
     ports:
-      - "${UWSGI_PORT}:${UWSGI_PORT}"
+      - "${PHP_FPM_PORT}:${PHP_FPM_PORT}"
     expose:
       - "${PHP_FPM_PORT}"
     depends_on:
