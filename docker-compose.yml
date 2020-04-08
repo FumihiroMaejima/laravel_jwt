@@ -5,7 +5,8 @@ services:
     build: ./app
     container_name: ${PROJECT_NAME}_app
     volumes:
-      - ./app/src:/var/www/html
+      - ./app/backend:/var/www/html
+      - ./app/php.ini:/usr/local/etc/php/php.ini
     ports:
       - "${PHP_FPM_PORT}:${PHP_FPM_PORT}"
     expose:
@@ -44,3 +45,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: "Asia/Tokyo"
+
+  redis:
+    image: redis:5.0-alpine
+    container_name: ${PROJECT_NAME}_redis
+    volumes:
+      - redis-store:/data
+
+volumes:
+  redis-store:

@@ -10,4 +10,4 @@
 .DS_Store
 
 # mysql data
-./mysql/mysql_daata
+mysql_data
