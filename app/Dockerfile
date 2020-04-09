@@ -1,7 +1,4 @@
-
 FROM php:7.4-fpm-alpine
-
-
 
 # tinker(psysh)
 ARG PSYSH_DIR=/usr/local/share/psysh
@@ -11,8 +8,6 @@ ARG PHP_MANUAL_URL=http://psysh.org/manual/ja/php_manual.sqlite
 # composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
-
-
 
 RUN apk update && \
   apk add --update --no-cache --virtual=.build-dependencies \
@@ -37,5 +32,5 @@ RUN apk update && \
   composer config -g repos.packagist composer https://packagist.jp && \
   composer global require hirak/prestissimo
 
+
 WORKDIR /var/www/html
-# RUN docker-php-ext-install pdo pdo_mysql

@@ -6,7 +6,7 @@
 
 -MySQL:８
 
--Nginx:1.17.7
+-Nginx:1.17(nginx:1.17-alpine)
 
 
 ## 開発環境構築
