@@ -10,9 +10,10 @@ Laravel環境をDockerで構築する為の手順書
 
 -Nginx:1.17(nginx:1.17-alpine)
 
-## ローカル環境の構築(Mac)
+# ローカル環境の構築(Mac)
 
-### PHPのバージョン更新
+## PHPのバージョン更新
+
 ```shell-session
 $ brew search php@7
 ==> Formulae
@@ -54,7 +55,7 @@ Zend Engine v3.4.0, Copyright (c) Zend Technologies
     with Zend OPcache v7.4.4, Copyright (c), by Zend Technologies
 ```
 
-### Composerのインストール
+## Composerのインストール
 
 opensslのインストール
 
@@ -83,9 +84,9 @@ $ composer --version
 Composer version 1.10.4 2020-04-09 17:05:50
 ```
 
-## 開発環境構築
+# 開発環境構築
 
-### 不要ファイルの削除
+## 不要ファイルの削除
 
 ＊コンテナイメージの作り直し時も同様
 
@@ -96,7 +97,7 @@ $ docker-compose up -d
 
 ```
 
-### Laravelプロジェクトの新規作成
+## Laravelプロジェクトの新規作成
 
 dockerコンテナとマウントする為の「backend」ディレクトリはローカルで作成する。
 「app」ディレクトリに移動してcomposerでプロジェクトを新規作成する。
@@ -106,6 +107,53 @@ dockerコンテナとマウントする為の「backend」ディレクトリは�
 プロジェクト名:backend
 
 *(フロントエンドとの連携を考慮しての命名)
+
+```shell-session
+$ cd app
+$ composer create-project laravel/laravel=6.* --prefer-dist backend
+```
+
+## パッケージのインストール
+
+バージョン7系をインストールする場合
+「GuzzleHttpClient」はバージョン7系だとデフォルトでインストールされる。
+
+```shell-session
+$ composer require guzzlehttp/guzzle
+$ composer require --dev nunomaduro/phpinsights
+$ composer require --dev barryvdh/laravel-debugbar
+$ composer require --dev friendsofphp/php-cs-fixer
+$ composer require --dev squizlabs/php_codesniffer
+$ composer require --dev phpmd/phpmd
+$ composer require --dev codedungeon/phpunit-result-printer
+$ composer require --dev barryvdh/laravel-ide-helper
+```
+
+php-cs-fixer,phpcs,phpmdの設定ファイルを格納する
+
+```shell-session
+backend/.php_cs
+backend/phpcs.xml
+backend/ruleset.xml
+```
+
+CI関係のコマンド
+
+```shell-session
+vendor/bin/phpunit --testdox
+vendor/bin/php-cs-fixer fix -v
+vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
+vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor
+```
+
+# 補足
+## Laravelを使わない場合
+
+Laravelを使わずにPHPのコードを書く場合、少なくともappとnginxのコンテナは必要になる。
+
+既存のLaravelの「backend」ディレクトリを削除し。新たに「backend」ディレクトリとその中に「public」ディレクトリを作る。
+
+「public」ディレクトリの中にphpファイルを格納すれば良い。
 
 ```shell-session
 $ cd app
