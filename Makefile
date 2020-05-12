@@ -12,6 +12,9 @@ down-rmi:
 ps:
 	docker-compose ps
 
+migrate:
+	docker-compose exec app php artisan migrate
+
 migrate-fresh:
 	docker-compose exec app php artisan migrate:fresh
 

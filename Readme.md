@@ -208,16 +208,59 @@ vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
 vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor
 ```
 
-# 補足
-## Laravelを使わない場合
 
-Laravelを使わずにPHPのコードを書く場合、少なくともappとnginxのコンテナは必要になる。
+## マイグレーションについて
 
-既存のLaravelの「backend」ディレクトリを削除し。新たに「backend」ディレクトリとその中に「public」ディレクトリを作る。
-
-「public」ディレクトリの中にphpファイルを格納すれば良い。
+backend/.envの値はプロジェクトrootの.envの値に合わせること。
+DB_HOSTはdocker.compose.ymlのmysqlコンテナの名前と同様になる。
 
 ```shell-session
-$ cd app
-$ composer create-project laravel/laravel=6.* --prefer-dist backend
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
 ```
+
+マイグレーションは必ずコンテナの内部で実行すること
+
+```shell-session
+$ docker-compose exec app php artisan migrate
+Migration table created successfully.
+Migrating: 2014_10_12_000000_create_users_table
+Migrated:  2014_10_12_000000_create_users_table (0.07 seconds)
+Migrating: 2019_08_19_000000_create_failed_jobs_table
+Migrated:  2019_08_19_000000_create_failed_jobs_table (0.03 seconds)
+```
+
+DBのテーブル内の状態を初期化したい場合は、refreshコマンドを使う。
+
+データベース全体を作り直すことが出来る。
+
+```shell-session
+$ docker-compose exec app php artisan migrate:refresh
+Rolling back: 2019_08_19_000000_create_failed_jobs_table
+Rolled back:  2019_08_19_000000_create_failed_jobs_table (0.08 seconds)
+Rolling back: 2014_10_12_000000_create_users_table
+Rolled back:  2014_10_12_000000_create_users_table (0.03 seconds)
+Migrating: 2014_10_12_000000_create_users_table
+Migrated:  2014_10_12_000000_create_users_table (0.06 seconds)
+Migrating: 2019_08_19_000000_create_failed_jobs_table
+Migrated:  2019_08_19_000000_create_failed_jobs_table (0.03 seconds)
+```
+
+データベースをリフレッシュし、全データベースシードを実行する
+
+```shell-session
+$ php artisan migrate:refresh --seed
+```
+
+データベースから全テーブルをドロップする。
+
+```shell-session
+$ php artisan migrate:fresh (--seed)
+```
+
+# 補足
+
