@@ -1,0 +1,63 @@
+{
+  "name": "nuxt_admin",
+  "version": "1.0.0",
+  "description": "my nuxt admin template.",
+  "author": "Fumihiro_Maejima",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "generate": "nuxt-ts generate",
+    "start": "nuxt-ts start",
+    "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
+    "test": "jest",
+    "mock:build": "axios-mock-server -b",
+    "mock:watch": "axios-mock-server -w"
+  },
+  "lint-staged": {
+    "*.{js,vue}": "yarn lint",
+    "*.{css,vue}": "stylelint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@nuxt/typescript-runtime": "^0.4.0",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/dotenv": "^1.4.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "axios-mock-server": "^0.16.3",
+    "material-design-icons-iconfont": "^5.0.1",
+    "nuxt": "^2.0.0",
+    "vue-property-decorator": "^8.4.2",
+    "vuex-class": "^0.3.2",
+    "vuex-module-decorators": "^0.17.0"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^0.6.0",
+    "@nuxtjs/eslint-config-typescript": "^1.0.0",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "@nuxtjs/stylelint-module": "^3.1.0",
+    "@nuxtjs/vuetify": "^1.0.0",
+    "@vue/test-utils": "^1.0.0-beta.27",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.0.0",
+    "jest": "^24.1.0",
+    "lint-staged": "^10.0.0",
+    "node-sass": "^4.14.1",
+    "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
+    "stylelint": "^10.1.0",
+    "ts-jest": "^25.0.0",
+    "vue-jest": "^4.0.0-0"
+  }
+}
