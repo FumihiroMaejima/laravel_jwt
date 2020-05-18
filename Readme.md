@@ -262,5 +262,40 @@ $ php artisan migrate:refresh --seed
 $ php artisan migrate:fresh (--seed)
 ```
 
+## 認証機能作成について
+
+一度、migrate:freshなと実行しておくと良い。
+
+
+laravel/uiのインストール
+
+メモリ消費量が大きい為、コンテナ側で実行する。(php.iniの設定)
+
+```shell-session
+$ docker-compose exec app composer require laravel/ui
+```
+
+認証系のファイルの作成
+
+```shell-session
+$ php artisan ui vue --auth
+```
+
+マイグレーションの実行
+
+```shell-session
+$ docker-compose exec app php artisan migrate
+```
+
+アセットのコンパイル
+
+```shell-session
+$ npm install
+$ npm run dev or npm run production
+```
+
+上記でデフォルトの認証機能が作成出来る。
+
+
 # 補足
 

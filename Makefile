@@ -15,11 +15,17 @@ ps:
 migrate:
 	docker-compose exec app php artisan migrate
 
+# データベースから全テーブルをドロップし、その後migrateを行う
 migrate-fresh:
 	docker-compose exec app php artisan migrate:fresh
 
+# 全部のデータベースマイグレーションを最初にロールバックし,その後migrateを行う
 migrate-refresh:
 	docker-compose exec app php artisan migrate:refresh
+
+# migrationを全てロールバックする
+migrate-reset:
+	docker-compose exec app php artisan migrate:reset
 
 seed:
 	docker-compose exec app php artisan db:seed
