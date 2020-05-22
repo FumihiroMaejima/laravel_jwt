@@ -297,5 +297,115 @@ $ npm run dev or npm run production
 上記でデフォルトの認証機能が作成出来る。
 
 
+## Json Web Tokens(JWT)の設定について
+
+tymon/jwt-authのインストール
+
+```shell-session
+$ composer require tymon/jwt-auth ^1.0.0
+```
+
+config/jwt.phpの作成
+
+```shell-session
+$ php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+```
+
+JWTで用いる秘密鍵の作成
+
+```shell-session
+$ php artisan jwt:secret
+```
+
+JWTで用いる秘密鍵の作成
+
+```shell-session
+$ composer require tymon/jwt-auth ^1.0.0
+```
+
+⇨「.env」に「JWT_SECRET」のパラメーターが追加される。
+
+config/auth.phpの設定
+
+```shell-session
+$ composer require tymon/jwt-auth ^1.0.0
+```
+
+
+config/auth.phpの設定
+
+「defaults」の「guard」を「api」に、「guards」の「api」の「driver」を「jwt」に変更する。
+
+
+```PHP
+  'defaults' => [
+      'guard' => 'api',
+      'passwords' => 'users',
+  ],
+
+  'guards' => [
+      'web' => [
+          'driver' => 'session',
+          'provider' => 'users',
+      ],
+
+      'api' => [
+          'driver' => 'jwt',
+          'provider' => 'users',
+          'hash' => false,
+      ],
+  ],
+```
+
+Userモデルの修正
+
+app/Model/Userを下記の通りに修正する。
+
+・「Tymon\JWTAuth\Contracts\JWTSubject」のuse宣言とimplementsとして設定
+・「JWTSubject」で定義されているメソッドを定義する。
+
+
+```PHP
+<?php
+
+namespace App;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+class User extends Authenticatable implements JWTSubject
+{
+    use Notifiable;
+
+    /*  省略  */
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.(JWTSubject)
+     *
+     * @a return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        // primary keyを取得
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.(JWTSubject)
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
+```
+
+
+
+
 # 補足
 
