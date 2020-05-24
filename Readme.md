@@ -362,13 +362,16 @@ Userモデルの修正
 app/Model/Userを下記の通りに修正する。
 
 ・「Tymon\JWTAuth\Contracts\JWTSubject」のuse宣言とimplementsとして設定
+
 ・「JWTSubject」で定義されているメソッドを定義する。
+
+＊namespaceに注意する。
 
 
 ```PHP
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -404,6 +407,181 @@ class User extends Authenticatable implements JWTSubject
 }
 ```
 
+conposer.jsonの修正
+
+Userモデルの位置を変更した為、修正する。
+
+「autoload」の「psr-4」に。下記を記述を追記する。
+
+```Json
+"Model\\": "app/Model/"
+```
+
+
+```Json
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Model\\": "app/Model/"
+        },
+        /* 省略 */
+    },
+```
+
+composer dump-autoloadの実行
+
+```shell-session
+$ composer dump-autoload
+```
+
+
+
+ルーティングの修正
+
+router/api.phpを下記の通りに修正
+
+＊api.phpに設定されたurlは自動的に「api」というパスが割当てられる為、「api」の記載は不要。
+
+
+```PHP
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'AuthController@login');
+});
+
+Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::GET('own', 'AuthController@me');
+});
+
+```
+
+
+
+コントローラーの作成
+
+```shell-session
+ $ php artisan make:controller AuthController
+```
+
+内容は下記の通り(コンストラクタとログイン処理のみ抜粋)
+
+
+```PHP
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // Illuminate\Routing\Controller
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login()
+    {
+        $credentials = request(['email', 'password']);
+
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+```
+
+# テストユーザーの作成
+
+
+```shell-session
+ $ php artisan make:seeder UsersTableSeeder
+```
+
+シーダーファイルの作成
+
+
+```PHP
+
+class UsersTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('users')->insert([
+            'name' => 'test',
+            'email' => 'test_tarou@example.com',
+            'password' => bcrypt('testpassword'),
+        ]);
+    }
+}
+
+```
+
+DatabaseSeederの編集
+
+
+```PHP
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        // $this->call(UserSeeder::class);
+        $this->call(UsersTableSeeder::class);
+    }
+}
+
+```
+
+
+シーディングの実行
+
+```shell-session
+ $ php artisan db:seed
+```
+
+ログインリクエストの実行
+
+
+PostmanなどのAPIクライアントで下記のURLでPOSTリクエストを実行する。
+
+```shell-session
+localhost/api/auth/login
+```
+
+リクエストボディ
+
+```JSON
+{
+	"email": "test_tarou@example.com",
+	"password": "testpassword"
+}
+```
+
+レスポンスボディ
+
+```JSON
+{
+    "access_token": "ランダム文字列のトークン",
+    "token_type": "bearer",
+    "expires_in": 3600
+}
+```
 
 
 

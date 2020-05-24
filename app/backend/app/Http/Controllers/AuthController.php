@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 // use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
+// use Tymon\JWTAuth\Facades\JWTAuth;
+// use App\Models\User;
 
 
 class AuthController extends Controller
@@ -41,7 +43,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function own()
     {
         return response()->json(auth()->user());
     }
