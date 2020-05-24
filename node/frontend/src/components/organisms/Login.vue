@@ -102,8 +102,8 @@ export default class Login extends Vue {
       }
       self.getTokenDataAction(randomString)
     }
-    function LoginFunction() {
-      client
+    async function LoginFunction() {
+      await client
         .get(cnf.API_PATH_USERS_USER)
         .then((response) => {
           console.log('axios get responce: ' + JSON.stringify(response.data))
@@ -112,7 +112,7 @@ export default class Login extends Vue {
           console.log('axios get error: ' + error)
         })
     }
-    return [getToken(), LoginFunction()]
+    return [getToken(), /* LoginFunction() */]
   }
 
   // methods
@@ -124,8 +124,8 @@ export default class Login extends Vue {
     return this.password
   }
 
-  LoginFunction() {
-    client
+  async LoginFunction() {
+    await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
         console.log(

@@ -107,21 +107,30 @@ create-nuxt-app v2.15.0
 
 # .env.local
 # NODE_ENV='local'
-# VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
+# BASE_URL=http://localhost:3030
+# VUE_APP_HEADER_TITLE='LaraJWT'
 # VUE_APP_API_URL='http://localhost/'
 # VUE_APP_BACKEND_API_DOMAIN=http://localhost
+# MOCK_CLIENT_MODE='mockClientMode'
+# DEVELOP_API_URL='http://localhost:3030/'
 
 # .env.development
 # NODE_ENV='development'
-VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
-VUE_APP_API_URL='http://localhost:3000/'
+BASE_URL=http://localhost:3030
+VUE_APP_HEADER_TITLE='LaraJWT'
+VUE_APP_API_URL='http://localhost:3030/'
 VUE_APP_BACKEND_API_DOMAIN=http://localhost
+MOCK_CLIENT_MODE='mockClientMode'
+DEVELOP_API_URL='http://localhost:3030/'
 
 # .env.prod
 # NODE_ENV='production'
-# VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
+# BASE_URL=http://localhost:3030
+# VUE_APP_HEADER_TITLE='LaraJWT'
 # VUE_APP_API_URL='http://localhost/'
 # VUE_APP_BACKEND_API_DOMAIN=http://localhost
+# MOCK_CLIENT_MODE=''
+# DEVELOP_API_URL='http://localhost:3030/'
 
 
 ```
@@ -140,6 +149,8 @@ $ yarn add axios-mock-server
 $ yarn add material-design-icons-iconfont
 $ yarn add vuex-class
 $ yarn add vue-property-decorator
+$ yarn add @nuxtjs/proxy
+$ yarn add @types/node
 ```
 
 scss系のライブラリは別途記載。
@@ -525,26 +536,82 @@ mocks/$mock.js was built successfully.
 
 client.jsを下記の通りに修正
 
+MOCK_CLIENT_MODEに指定の文字列が設定されるとプロキシを利用せずにmockを利用したリクエストを送ることになる。
+
 ```Javascript
 import axios from 'axios'
 import mock from '../mocks/$mock'
+
+let baseURL = process.env.VUE_APP_API_URL
+
 if (process.env.NODE_ENV === 'development') {
-  mock()
+  baseURL = process.env.DEVELOP_API_URL
+  if (process.env.MOCK_CLIENT_MODE === 'mockClientMode') {
+    mock()
+  }
 }
 
 const client = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: baseURL,
   responseType: 'json'
 })
 
 export default client
+
 ```
+
+### axiosのプロキシ設定
+
+プロキシを設定する為に下記をインストールする。
+
+```shell-session
+$ yarn add @types/node
+$ yarn add @nuxtjs/proxy
+```
+
+tsconfi.jsonの「types」に追記する。
+
+```Json
+  "types": [
+    "vuetify",
+    "@types/node",
+    "@nuxt/types",
+    "@nuxtjs/axios"
+  ]
+```
+
+nuxt.config.tsの「modules」に「'@nuxtjs/proxy'」を追記
+
+```TypeScript
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/proxy',
+    // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    '@nuxtjs/dotenv'
+  ],
+```
+
+nuxt.config.tsの「axios」と「proxy」にそれぞれ下記の通り設定を加える。
+
+「axios」の「proxy」キーは変数などで任意に変更出来る様にしておくと良い。
+
+```TypeScript
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/api': 'http://localhost/',
+  },
+```
+
 
 ## SCSSの利用設定
 
 ### sass-loaderとnode-sassと@nuxtjs/style-resourcesをインストールする
 
-```
+```shell-session
 $ yarn add --dev sass-loader
 $ yarn add --dev node-sass
 $ yarn add --dev @nuxtjs/style-resources

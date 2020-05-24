@@ -49,6 +49,8 @@ services:
   node:
     build: ./node
     container_name: ${PROJECT_NAME}_node
+    volumes:
+      - ./node/frontend:/frontend
     depends_on:
       - app
     ports:
