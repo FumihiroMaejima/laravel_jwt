@@ -104,7 +104,7 @@ export default class Login extends Vue {
     }
     function LoginFunction() {
       client
-        .get('/api/users/user')
+        .get(cnf.API_PATH_USERS_USER)
         .then((response) => {
           console.log('axios get responce: ' + JSON.stringify(response.data))
         })
@@ -126,7 +126,7 @@ export default class Login extends Vue {
 
   LoginFunction() {
     client
-      .post('/api/login', this.$store.state.modules.login.postData)
+      .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
         console.log(
           'axios post data: ' +

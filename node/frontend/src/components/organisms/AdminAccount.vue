@@ -35,7 +35,7 @@ export default class AdminAccount extends Vue {
 
   public created() {
     client
-      .get('/api/admin/account')
+      .get(cnf.PATH_ADMIN_ACCOUNT)
       .then((response) => {
         console.log('axios get: ' + JSON.stringify(response.data))
       })
