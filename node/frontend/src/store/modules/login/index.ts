@@ -1,21 +1,6 @@
-/* classic mode */
-// import { Module } from 'vuex'
-// import getters from './getters'
-// import actions from './actions'
-// import mutations from './mutations'
-// import { LoginState, RootState } from '~/store/types'
-/* module mode */
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
 import { LoginState, RootState, PostData } from '~/store/types'
 
-/* module modeの場合はexportを追記してfunction形式にする */
-/* const state: LoginState = {
-  postData: {
-    name: '',
-    password: '',
-    token: ''
-  }
-} */
 export const state = () => ({
   postData: {
     name: '',
@@ -24,7 +9,6 @@ export const state = () => ({
   }
 })
 
-/* module mode の時はlogin.ts内に記述する classic modeの場合はファイルを別ける。 */
 export const getters: GetterTree<LoginState, RootState> = {
   name: (state: LoginState) => state.postData.name,
   password: (state: LoginState) => state.postData.password,
@@ -54,13 +38,3 @@ export const mutations: MutationTree<LoginState> = {
     state.postData.token = payload
   }
 }
-/* 上記までがmodule mode 対応。 */
-
-/* module modeの場合は不要の為コメントアウト */
-/* export const login: Module<LoginState, RootState> = {
-  namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations
-} */
