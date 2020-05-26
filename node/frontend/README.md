@@ -606,6 +606,37 @@ nuxt.config.tsの「axios」と「proxy」にそれぞれ下記の通り設定�
   },
 ```
 
+## Cookieを取得する方法
+
+cookie-universal-nuxtのインストール
+
+```shell-session
+$ yarn add cookie-universal-nuxt
+```
+
+tsconfi.jsonの「types」に追記する。
+
+```Json
+  "types": [
+    "cookie-universal-nuxt"
+  ]
+```
+
+nuxt.config.tsの「modules」に「'cookie-universal-nuxt'」を追記
+
+```TypeScript
+  modules: [
+    ['cookie-universal-nuxt', { parseJSON: false }]
+  ],
+```
+
+cookieの取得
+
+```TypeScript
+  this.$cookies.get('csrftoken')
+  this.$cookies.set('csrftoken', value);
+```
+
 
 ## SCSSの利用設定
 

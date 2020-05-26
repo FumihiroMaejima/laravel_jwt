@@ -86,21 +86,7 @@ export default class Login extends Vue {
   public created() {
     const self = this
     function getToken() {
-      const stringValue = cnf.targetString
-      let randomString: string = ''
-      if (process.browser) {
-        randomString = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-          .map((num: any) => stringValue[num % stringValue.length])
-          .join('')
-      } else {
-        // SSR対応
-        randomString = Array.from(Array(16))
-          .map(
-            () => stringValue[Math.floor(Math.random() * stringValue.length)]
-          )
-          .join('')
-      }
-      self.getTokenDataAction(randomString)
+      self.getTokenDataAction(self.$cookies.get('csrftoken'))
     }
     async function LoginFunction() {
       await client

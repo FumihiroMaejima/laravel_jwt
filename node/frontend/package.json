@@ -38,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "axios-mock-server": "^0.16.3",
+    "cookie-universal-nuxt": "^2.1.4",
     "material-design-icons-iconfont": "^5.0.1",
     "nuxt": "^2.0.0",
     "vue-property-decorator": "^8.4.2",
