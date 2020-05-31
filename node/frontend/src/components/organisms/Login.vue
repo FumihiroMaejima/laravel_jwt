@@ -134,6 +134,7 @@ export default class Login extends Vue {
       .catch((error) => {
         console.error('axios post error: ' + error)
         this.finishPostAction()
+        this.$emit('loginErrorEvent', true)
       })
   }
 }

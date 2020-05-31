@@ -1,6 +1,6 @@
 <template>
   <div class="admin-page__row">
-    <SnackBar :text="'Login Sucessed!'" />
+    <SnackBar text="Login Sucessed!" ref="toast"/>
     <Admin />
   </div>
 </template>
@@ -16,5 +16,14 @@ import Admin from '~/components/organisms/Admin.vue'
     Admin
   }
 })
-export default class AdminPage extends Vue {}
+export default class AdminPage extends Vue {
+  $refs!: {
+    toast: SnackBar
+  }
+  // mounted
+  public mounted() {
+    this.$refs.toast.open = true
+  }
+
+}
 </script>

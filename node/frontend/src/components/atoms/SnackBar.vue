@@ -1,7 +1,7 @@
 <template>
   <v-snackbar
-    v-model="snackbarOpen"
-    :color="snackbarColor"
+    v-model="openData"
+    :color="color"
     :timeout="time"
     :top="isTop"
     :right="isRight"
@@ -16,11 +16,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class SnackBar extends Vue {
-  // data
-  private snackbarOpen = true
+ // data
+  public open: boolean = false
 
   @Prop({ default: 'green' })
-  private snackbarColor?: string
+  private color?: string
 
   @Prop({ default: 'a snackbar component' })
   private text?: string
@@ -36,5 +36,13 @@ export default class SnackBar extends Vue {
 
   @Prop({ default: true })
   private isRight?: boolean
+
+  public get openData(): boolean {
+    return this.open
+  }
+
+  public set openData(value: boolean) {
+    this.open = value
+  }
 }
 </script>
