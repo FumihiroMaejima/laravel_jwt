@@ -11,6 +11,8 @@ use Illuminate\Support\Carbon;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    protected $carbon;
+    protected $now;
 
     /**
      * The attributes that are mass assignable.
@@ -38,6 +40,27 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function __construct()
+    {
+        $this->carbon = new Carbon();
+        $this->now = $this->carbon->now()->timestamp;
+    }
+
+    public function getUserId()
+    {
+        return  $this->id;
+    }
+
+    public function getUserName()
+    {
+        return $this->name;
+    }
+
+    public function getUserEmail()
+    {
+        return $this->email;
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.(JWTSubject)

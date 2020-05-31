@@ -65,6 +65,9 @@ export default class Login extends Vue {
   @LoginModule.Action('getTokenDataAction')
   private getTokenDataAction!: (payload: PostData['token']) => {}
 
+    @LoginModule.Action('refreshLoginPostAction')
+  private refreshLoginPostAction!: () => {}
+
   // computed
   public get nameData(): string {
     return this.name
@@ -88,7 +91,7 @@ export default class Login extends Vue {
     function getToken() {
       self.getTokenDataAction(self.$cookies.get('csrftoken'))
     }
-    async function LoginFunction() {
+    /* async function LoginFunction() {
       await client
         .get(cnf.API_PATH_USERS_USER)
         .then((response) => {
@@ -97,7 +100,7 @@ export default class Login extends Vue {
         .catch((error) => {
           console.log('axios get error: ' + error)
         })
-    }
+    } */
     return [getToken(), /* LoginFunction() */]
   }
 
@@ -110,7 +113,13 @@ export default class Login extends Vue {
     return this.password
   }
 
+  finishPostAction() {
+    this.refreshLoginPostAction()
+    this.$emit('loginEvent', false)
+  }
+
   async LoginFunction() {
+    this.$emit('loginEvent', true)
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
@@ -119,10 +128,12 @@ export default class Login extends Vue {
             JSON.stringify(this.$store.state.modules.login.postData)
         )
         console.log('axios post responce: ' + JSON.stringify(response.data))
+        this.finishPostAction()
         this.$router.push('/admin')
       })
       .catch((error) => {
-        console.log('axios post error: ' + error)
+        console.error('axios post error: ' + error)
+        this.finishPostAction()
       })
   }
 }

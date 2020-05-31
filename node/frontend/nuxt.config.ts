@@ -66,7 +66,7 @@ export default {
     proxy: isProxy
   },
   proxy: {
-    '/api': 'http://localhost/',
+    '/api': 'http://localhost/'
   },
   /*
    ** vuetify module configuration

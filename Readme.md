@@ -496,7 +496,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
     }
 ```
 
-# テストユーザーの作成
+テストユーザーの作成
 
 
 ```shell-session
@@ -518,8 +518,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'test',
-            'email' => 'test_tarou@example.com',
+            'name' => 'testuser',
+            'email' => 'testuser@example.com',
             'password' => bcrypt('testpassword'),
         ]);
     }
@@ -568,7 +568,7 @@ localhost/api/auth/login
 
 ```JSON
 {
-	"email": "test_tarou@example.com",
+	"email": "v@example.com",
 	"password": "testpassword"
 }
 ```
@@ -583,6 +583,76 @@ localhost/api/auth/login
 }
 ```
 
+
+ログイン用バリデーションファイルの作成
+
+```shell-session
+$ php artisan make:request LoginRequest
+```
+
+
+```PHP
+
+class LoginRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return false;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'email' => 'required|string|min:6',
+            'password' => 'required|string|min:6|max:16'
+        ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        $response = response()->json([
+            'status' => 400,
+            'errors' => $validator->errors(),
+        ], 400);
+        throw new HttpResponseException($response);
+    }
+}
+
+```
+
+Serviceの作成
+
+「backend/app」ディレクトリの下に「Service」ディレクトリを作成し、「Service.php」を作成する。
+
+```PHP
+
+<?php
+
+namespace App\Service;
+
+abstract class Service
+{
+
+}
+
+```
+
+「AuthTokenServie.php」を作成する。
+
+```PHP
+
+
+```
 
 
 # 補足

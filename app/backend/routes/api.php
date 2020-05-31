@@ -27,5 +27,5 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::GET('own', 'AuthController@me');
+    Route::post('self', 'AuthController@getAuthUser');
 });

@@ -24,6 +24,9 @@ export const actions: ActionTree<LoginState, RootState> = {
   },
   getTokenDataAction: ({ commit }, payload: PostData['token']) => {
     commit('setTokenData', payload)
+  },
+  refreshLoginPostAction: ({ commit }) => {
+    commit('setRefreshData')
   }
 }
 
@@ -36,5 +39,12 @@ export const mutations: MutationTree<LoginState> = {
   },
   setTokenData: (state: LoginState, payload: PostData['token']) => {
     state.postData.token = payload
+  },
+  setRefreshData: (state: LoginState) => {
+    state.postData = {
+      name: '',
+      password: '',
+      token: ''
+    }
   }
 }

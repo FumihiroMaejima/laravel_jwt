@@ -23,7 +23,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a JWT via given credentials.
+     * ログイン
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -40,17 +40,21 @@ class AuthController extends Controller
     }
 
     /**
-     * Get the authenticated User.
+     * ログインユーザーの情報を取得
+     * @header Accept application/json
+     * @header Authorization Bearer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function own()
+    public function getAuthUser()
     {
         return response()->json(auth()->user());
     }
 
     /**
-     * Log the user out (Invalidate the token).
+     * ログアウト
+     * @header Accept application/json
+     * @header Authorization Bearer
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -62,7 +66,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh a token.
+     * トークンのリフレッシュ
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -73,7 +77,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get the token array structure.
+     * レスポンスデータの作成
      *
      * @param  string $token
      *
@@ -83,10 +87,12 @@ class AuthController extends Controller
     {
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
+        // ユーザーIDを返す。
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth('api')->user()->id,
         ]);
     }
 }
