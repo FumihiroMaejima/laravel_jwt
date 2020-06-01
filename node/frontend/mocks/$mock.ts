@@ -3,11 +3,12 @@ import { AxiosInstance } from 'axios'
 import mockServer from 'axios-mock-server'
 import mock0 from './api/users/user'
 import mock1 from './api/login'
-import mock2 from './api/auth/login'
-import mock3 from './api/admin/userlog'
-import mock4 from './api/admin/userinfo'
-import mock5 from './api/admin/calender'
-import mock6 from './api/admin/account'
+import mock2 from './api/auth/logout'
+import mock3 from './api/auth/login'
+import mock4 from './api/admin/userlog'
+import mock5 from './api/admin/userinfo'
+import mock6 from './api/admin/calender'
+import mock7 from './api/admin/account'
 
 export default (client?: AxiosInstance) => mockServer([
   {
@@ -19,23 +20,27 @@ export default (client?: AxiosInstance) => mockServer([
     methods: mock1
   },
   {
-    path: '/api/auth/login',
+    path: '/api/auth/logout',
     methods: mock2
   },
   {
-    path: '/api/admin/userlog',
+    path: '/api/auth/login',
     methods: mock3
   },
   {
-    path: '/api/admin/userinfo',
+    path: '/api/admin/userlog',
     methods: mock4
   },
   {
-    path: '/api/admin/calender',
+    path: '/api/admin/userinfo',
     methods: mock5
   },
   {
-    path: '/api/admin/account',
+    path: '/api/admin/calender',
     methods: mock6
+  },
+  {
+    path: '/api/admin/account',
+    methods: mock7
   }
 ], client, '')

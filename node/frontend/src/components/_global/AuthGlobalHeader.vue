@@ -38,7 +38,16 @@
         </v-list>
 
         <div>
-          <v-btn block href="/">Logout</v-btn>
+          <EitherModal
+            headerText="ログアウト確認"
+            text="ログアウトします。よろしいですか？"
+            :action="testFunction"
+            ref="modal"
+          >
+            <template v-slot:button>
+              <v-btn block @click="openModal" >Logout</v-btn>
+            </template>
+          </EitherModal>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -83,15 +92,53 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import cnf from '~/config/authGlobal.json'
+import EitherModal from '~/components/atoms/EitherModal.vue'
+import client from '~/client'
+import authCnf from '~/config/authGlobal.json'
+import cnf from '~/config/config.json'
 
-@Component
+@Component({
+  components: {
+    EitherModal
+  }
+})
 export default class AuthGlobalHeader extends Vue {
-  public accountMenuList: object = cnf.accountMenuList
+  $refs!: {
+    modal: EitherModal
+  }
+
+  public accountMenuList: object = authCnf.accountMenuList
   public headerTitle: string =
     process.env.VUE_APP_HEADER_TITLE || 'ADMIN HEADER'
 
   public open = false
-  public navigationLists: object = cnf.navigationLists
+  public navigationLists: object = authCnf.navigationLists
+
+
+  openModal() {
+    this.$refs.modal.open = true
+  }
+
+  testFunction() {
+    console.log('log out test.')
+    this.$refs.modal.open = false
+    this.$router.push('/')
+  }
+
+  async LogoutFunction() {
+    this.$emit('logoutEvent', true)
+    await client
+      .post(cnf.PATH_AUTH_LOGOUT, {})
+      .then((response) => {
+        console.log('axios post responce: ' + JSON.stringify(response.data))
+        this.$emit('logoutEvent', false)
+        this.$router.push('/')
+      })
+      .catch((error) => {
+        console.error('axios post error: ' + error)
+        this.$emit('logoutEvent', false)
+        this.$emit('loginErrorEvent', true)
+      })
+  }
 }
 </script>
