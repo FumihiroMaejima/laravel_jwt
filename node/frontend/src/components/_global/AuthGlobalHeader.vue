@@ -121,7 +121,9 @@ export default class AuthGlobalHeader extends Vue {
 
   testFunction() {
     console.log('log out test.')
+    this.$emit('logoutEvent', true)
     this.$refs.modal.open = false
+    this.$emit('logoutEvent', false)
     this.$router.push('/')
   }
 

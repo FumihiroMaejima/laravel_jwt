@@ -3,7 +3,7 @@
     <v-content>
       <SnackBar text="Login Failured!" color="red" ref="toast" />
       <Loading :open="isLoginProcess" />
-      <Login @loginEvent="changeOpenFlag" @loginErrorEvent="openErrorToast" />
+      <Login @loginEvent="changeLoadingFlag" @loginErrorEvent="openErrorToast" />
     </v-content>
   </v-app>
 </template>
@@ -34,7 +34,7 @@ export default class LoginPage extends Vue {
   }
 
   // methods
-  changeOpenFlag(value: boolean) {
+  changeLoadingFlag(value: boolean) {
     this.openLoading = value
   }
 
