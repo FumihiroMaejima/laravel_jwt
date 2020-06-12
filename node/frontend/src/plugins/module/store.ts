@@ -4,5 +4,5 @@ export default {
   modules: {
     auth
   },
-  namespaced: true,
+  namespaced: true
 }

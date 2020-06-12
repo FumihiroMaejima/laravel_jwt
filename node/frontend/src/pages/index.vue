@@ -1,9 +1,12 @@
 <template>
   <v-app>
     <v-content>
-      <SnackBar text="Login Failured!" color="red" ref="toast" />
+      <SnackBar ref="toast" text="Login Failured!" color="red" />
       <Loading :open="isLoginProcess" />
-      <Login @loginEvent="changeLoadingFlag" @loginErrorEvent="openErrorToast" />
+      <Login
+        @loginEvent="changeLoadingFlag"
+        @loginErrorEvent="openErrorToast"
+      />
     </v-content>
   </v-app>
 </template>
@@ -13,7 +16,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import Loading from '~/components/atoms/Loading.vue'
 import Login from '~/components/organisms/Login.vue'
 import SnackBar from '~/components/atoms/SnackBar.vue'
-
 
 @Component({
   components: {
@@ -26,6 +28,7 @@ export default class LoginPage extends Vue {
   $refs!: {
     toast: SnackBar
   }
+
   private openLoading = false
 
   // computed

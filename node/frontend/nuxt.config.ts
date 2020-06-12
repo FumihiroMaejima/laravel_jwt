@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 require('dotenv').config()
 
-const isProxy = process.env.MOCK_CLIENT_MODE !== 'mockClientMode' ? true : false
+const isProxy = process.env.MOCK_CLIENT_MODE !== 'mockClientMode'
 
 export default {
   mode: 'universal', // 'spa'
@@ -35,10 +35,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/module/plugin.ts',
-    '~/plugins/base.ts'
-  ],
+  plugins: ['~/plugins/module/plugin.ts', '~/plugins/base.ts'],
   /*
    ** Nuxt.js dev-modules
    */

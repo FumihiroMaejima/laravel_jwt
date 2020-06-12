@@ -39,13 +39,13 @@
 
         <div>
           <EitherModal
-            headerText="ログアウト確認"
+            ref="modal"
+            header-text="ログアウト確認"
             text="ログアウトします。よろしいですか？"
             :action="testFunction"
-            ref="modal"
           >
             <template v-slot:button>
-              <v-btn block @click="openModal" >Logout</v-btn>
+              <v-btn block @click="openModal">Logout</v-btn>
             </template>
           </EitherModal>
         </div>
@@ -113,7 +113,6 @@ export default class AuthGlobalHeader extends Vue {
 
   public open = false
   public navigationLists: object = authCnf.navigationLists
-
 
   openModal() {
     this.$refs.modal.open = true

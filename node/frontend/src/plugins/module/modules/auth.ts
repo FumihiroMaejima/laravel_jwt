@@ -1,9 +1,15 @@
+/* eslint-disable */
 export default {
   namespaced: true,
   state: {
     name: null,
     id: null,
     authority: {}
+  },
+  getters: {
+    name: (state: any) => state.name,
+    id: (state: any) => state.id,
+    authority: (state: any) => state.authority
   },
   actions: {
     getAuth({ commit }: any, payload: any) {
@@ -12,7 +18,7 @@ export default {
   },
   mutations: {
     setAuth(state: any, payload: any) {
-      Object.keys(payload).forEach(element => {
+      Object.keys(payload).forEach((element) => {
         state[element] - payload[element]
       })
     }

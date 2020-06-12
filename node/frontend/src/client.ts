@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const client = axios.create({
-  baseURL: baseURL,
+  baseURL,
   headers: {
     'Content-Type': 'application/json'
   },

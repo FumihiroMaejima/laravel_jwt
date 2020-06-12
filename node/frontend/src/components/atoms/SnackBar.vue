@@ -16,7 +16,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class SnackBar extends Vue {
- // data
+  // data
   public open: boolean = false
 
   @Prop({ default: 'green' })
