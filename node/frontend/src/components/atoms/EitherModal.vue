@@ -20,7 +20,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class EitherModal extends Vue {
- // data
+  // data
   public open: boolean = false
 
   @Prop({ default: 'add Header Text.' })
@@ -32,8 +32,10 @@ export default class EitherModal extends Vue {
   @Prop({ default: 290 })
   private width?: number
 
-  @Prop({ default: (value: boolean): void => {value = false} })
-  private action?: () => void;
+  @Prop({
+    default: (): void => {}
+  })
+  private action?: () => void
 
   public get dialog(): boolean {
     return this.open

@@ -13,6 +13,7 @@
   "API_PATH_LOGIN":"/api/login",
   "PATH_AUTH_LOGIN":"/api/auth/login",
   "PATH_AUTH_LOGOUT": "/api/auth/logout",
+  "PATH_AUTH_SELF": "/api/auth/self",
   "PATH_ADMIN_USERLOG":"/api/admin/userlog",
   "PATH_ADMIN_USERINFO":"/api/admin/userinfo",
   "PATH_ADMIN_CALENDER":"/api/admin/calender",

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Loading :open="isLoginProcess" />
-    <AuthGlobalHeader v-if="userID" @logoutEvent="changeLoadingFlag" />
+    <AuthGlobalHeader v-if="UserId" @logoutEvent="changeLoadingFlag" />
     <GlobalHeader v-else />
     <v-content>
       <nuxt />
@@ -32,22 +32,49 @@ const AuthModule = namespace('module/auth')
 export default class App extends Vue {
   private openLoading = false
 
+  @AuthModule.Getter('id')
+  private id!: number
+
   @AuthModule.Getter('name')
   private name!: string
 
-  @AuthModule.Getter('id')
-  private id!: string
+  @AuthModule.Getter('token')
+  private token!: string
 
   @AuthModule.Getter('authority')
   private authority!: string
+
+  @AuthModule.Action('getAuthData')
+  private getAuthData!: (payload: object) => {}
+
+  @AuthModule.Action('refreshAuthData')
+  private refreshAuthData!: () => {}
 
   // computed
   public get isLoginProcess(): boolean {
     return this.openLoading
   }
 
-  public get userID(): string {
+  public get UserId(): number {
     return this.id
+  }
+
+  created() {
+    // this.$myInjectedFunction('works in created' + this.$store.state.module.auth)
+
+    this.$base.authInstance(this.id, this.token).then((response) => {
+      this.getAuthData(response)
+
+      if (!this.token) {
+        this.refreshAuthData()
+        if (this.$route.path !== '/') {
+          this.$router.push('/')
+        }
+      }
+      /* else if (this.id) {
+
+      } */
+    })
   }
 
   // methods
