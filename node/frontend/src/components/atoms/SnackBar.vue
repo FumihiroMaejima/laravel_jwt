@@ -7,7 +7,7 @@
     :right="isRight"
   >
     {{ text }}
-    <v-btn :color="buttonColor" text @click="snackbarOpen = false">Close</v-btn>
+    <v-btn :color="buttonColor" text @click="open = false">Close</v-btn>
   </v-snackbar>
 </template>
 

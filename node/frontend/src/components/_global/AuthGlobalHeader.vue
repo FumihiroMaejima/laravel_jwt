@@ -42,7 +42,7 @@
             ref="modal"
             header-text="ログアウト確認"
             text="ログアウトします。よろしいですか？"
-            :action="testFunction"
+            :action="LogoutFunction"
           >
             <template v-slot:button>
               <v-btn block @click="openModal">Logout</v-btn>
@@ -92,10 +92,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
 import EitherModal from '~/components/atoms/EitherModal.vue'
 import client from '~/client'
 import authCnf from '~/config/authGlobal.json'
 import cnf from '~/config/config.json'
+
+const AuthModule = namespace('module/auth')
 
 @Component({
   components: {
@@ -106,6 +109,15 @@ export default class AuthGlobalHeader extends Vue {
   $refs!: {
     modal: EitherModal
   }
+
+  @AuthModule.Getter('id')
+  private id!: number
+
+  @AuthModule.Getter('token')
+  private token!: string
+
+  @AuthModule.Action('refreshAuthData')
+  private refreshAuthData!: () => {}
 
   public accountMenuList: object = authCnf.accountMenuList
   public headerTitle: string =
@@ -118,27 +130,25 @@ export default class AuthGlobalHeader extends Vue {
     this.$refs.modal.open = true
   }
 
-  testFunction() {
-    console.log('log out test.')
-    this.$emit('logoutEvent', true)
-    this.$refs.modal.open = false
-    this.$emit('logoutEvent', false)
-    this.$router.push('/')
-  }
-
   async LogoutFunction() {
     this.$emit('logoutEvent', true)
+    this.$refs.modal.open = false
     await client
-      .post(cnf.PATH_AUTH_LOGOUT, {})
+      .post(
+        cnf.PATH_AUTH_LOGOUT,
+        {},
+        { headers: this.$base.addHeaders({ id: this.id, token: this.token }) }
+      )
       .then((response) => {
         console.log('axios post responce: ' + JSON.stringify(response.data))
         this.$emit('logoutEvent', false)
+        this.refreshAuthData()
         this.$router.push('/')
       })
       .catch((error) => {
         console.error('axios post error: ' + error)
         this.$emit('logoutEvent', false)
-        this.$emit('loginErrorEvent', true)
+        this.$emit('logoutErrorEvent', true)
       })
   }
 }

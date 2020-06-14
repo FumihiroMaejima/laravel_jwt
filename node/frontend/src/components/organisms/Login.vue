@@ -34,6 +34,7 @@ import { PostData } from '~/store/types'
 import client from '~/client'
 import cnf from '~/config/config.json'
 
+const AuthModule = namespace('module/auth')
 const LoginModule = namespace('modules/login')
 
 @Component
@@ -65,8 +66,11 @@ export default class Login extends Vue {
   @LoginModule.Action('getTokenDataAction')
   private getTokenDataAction!: (payload: PostData['token']) => {}
 
-    @LoginModule.Action('refreshLoginPostAction')
+  @LoginModule.Action('refreshLoginPostAction')
   private refreshLoginPostAction!: () => {}
+
+  @AuthModule.Action('getAuthData')
+  private getAuthData!: (payload: object) => {}
 
   // computed
   public get nameData(): string {
@@ -87,21 +91,7 @@ export default class Login extends Vue {
 
   // created
   public created() {
-    const self = this
-    function getToken() {
-      self.getTokenDataAction(self.$cookies.get('csrftoken'))
-    }
-    /* async function LoginFunction() {
-      await client
-        .get(cnf.API_PATH_USERS_USER)
-        .then((response) => {
-          console.log('axios get responce: ' + JSON.stringify(response.data))
-        })
-        .catch((error) => {
-          console.log('axios get error: ' + error)
-        })
-    } */
-    return [getToken(), /* LoginFunction() */]
+    this.getTokenDataAction(this.$cookies.get('csrftoken'))
   }
 
   // methods
@@ -128,6 +118,12 @@ export default class Login extends Vue {
             JSON.stringify(this.$store.state.modules.login.postData)
         )
         console.log('axios post responce: ' + JSON.stringify(response.data))
+        const data = response.data
+        this.getAuthData({
+          id: data.user.id,
+          name: data.user.name,
+          token: data.access_token
+        })
         this.finishPostAction()
         this.$router.push('/admin')
       })

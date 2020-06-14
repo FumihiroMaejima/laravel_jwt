@@ -1,7 +1,12 @@
 <template>
   <v-app>
     <Loading :open="isLoginProcess" />
-    <AuthGlobalHeader v-if="UserId" @logoutEvent="changeLoadingFlag" />
+    <SnackBar ref="toast" text="Logout Failured!" color="red" />
+    <AuthGlobalHeader
+      v-if="UserId"
+      @logoutEvent="changeLoadingFlag"
+      @logoutErrorEvent="openErrorToast"
+    />
     <GlobalHeader v-else />
     <v-content>
       <nuxt />
@@ -16,6 +21,7 @@ import { namespace } from 'vuex-class'
 import GlobalFooter from '~/components/_global/GlobalFooter.vue'
 import GlobalHeader from '@/components/_global/GlobalHeader.vue'
 import Loading from '~/components/atoms/Loading.vue'
+import SnackBar from '~/components/atoms/SnackBar.vue'
 import AuthGlobalHeader from '~/components/_global/AuthGlobalHeader.vue'
 import '~/assets/scss/App.scss'
 
@@ -26,10 +32,15 @@ const AuthModule = namespace('module/auth')
     GlobalFooter,
     GlobalHeader,
     Loading,
+    SnackBar,
     AuthGlobalHeader
   }
 })
 export default class App extends Vue {
+  $refs!: {
+    toast: SnackBar
+  }
+
   private openLoading = false
 
   @AuthModule.Getter('id')
@@ -80,6 +91,10 @@ export default class App extends Vue {
   // methods
   changeLoadingFlag(value: boolean) {
     this.openLoading = value
+  }
+
+  openErrorToast(value: boolean) {
+    this.$refs.toast.open = value
   }
 }
 </script>
