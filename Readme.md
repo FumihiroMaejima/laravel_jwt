@@ -654,6 +654,25 @@ abstract class Service
 
 ```
 
+# その他
+
+### テーブル作成
+
+```shell-session
+ $ php artisan make:migration create_test_table
+```
+
+### Model作成
+```shell-session
+ $ php artisan make:model Model/Test
+```
+
+### シーディングファイル作成
+```shell-session
+ $ php artisan make:seeder TestTableSeeder
+```
+
+
 
 # 補足
 
