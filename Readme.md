@@ -663,13 +663,28 @@ abstract class Service
 ```
 
 ### Model作成
+
 ```shell-session
  $ php artisan make:model Model/Test
 ```
 
 ### シーディングファイル作成
+
 ```shell-session
  $ php artisan make:seeder TestTableSeeder
+```
+
+### ポリシーの作成
+
+```shell-session
+$ php artisan make:policy TestPolicy
+```
+
+「/app/Policies」ディレクトリにファイルが生成される。
+
+### テストコードの作成
+```shell-session
+ $ php artisan make:test SampleTest --unit
 ```
 
 

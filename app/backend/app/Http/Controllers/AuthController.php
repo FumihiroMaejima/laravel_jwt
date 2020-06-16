@@ -87,7 +87,7 @@ class AuthController extends Controller
     {
         // Tymon\JWTAuth\factory
         // Tymon\JWTAuth\Claims\Factory
-        // ユーザーIDを返す。
+        // ユーザー情報を返す。
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

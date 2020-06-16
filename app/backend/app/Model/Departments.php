@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Departments extends Model
 {
-    // テーブルから削除する為、ソフトデリートは不要
     use SoftDeletes;
 
     //テーブル名指定
