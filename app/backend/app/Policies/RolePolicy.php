@@ -9,16 +9,6 @@ class RolePolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Create a new policy instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /* 閲覧 */
     public function view(User $user)
     {
