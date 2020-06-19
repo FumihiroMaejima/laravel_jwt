@@ -12,7 +12,8 @@
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
     "test": "jest",
     "mock:build": "axios-mock-server -b",
-    "mock:watch": "axios-mock-server -w"
+    "mock:watch": "axios-mock-server -w",
+    "storybook": "start-storybook -p 9500"
   },
   "lint-staged": {
     "*.{js,vue}": "yarn lint",
@@ -39,6 +40,7 @@
     "@typescript-eslint/parser": "^2.30.0",
     "axios-mock-server": "^0.16.3",
     "cookie-universal-nuxt": "^2.1.4",
+    "core-js": "2.6.10",
     "material-design-icons-iconfont": "^5.0.1",
     "nuxt": "^2.0.0",
     "vue-property-decorator": "^8.4.2",
@@ -46,9 +48,17 @@
     "vuex-module-decorators": "^0.17.0"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^5.3.19",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-backgrounds": "^5.3.19",
+    "@storybook/addon-knobs": "^5.3.19",
+    "@storybook/addon-notes": "^5.3.19",
+    "@storybook/addon-viewport": "^5.3.19",
+    "@storybook/vue": "^5.3.19",
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
+    "babel-preset-vue": "^2.0.2",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-nuxt": ">=0.4.2",
