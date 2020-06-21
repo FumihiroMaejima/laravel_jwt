@@ -27,7 +27,7 @@ Vue.use(Vuetify, {
 addDecorator(() => ({
   vuetify: new Vuetify(vuetifyOptions),
   template: '<v-app><story/></v-app>'
-}));
+}))
 
 addParameters({
   backgrounds: [

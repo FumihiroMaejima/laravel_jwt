@@ -4,14 +4,14 @@ Laravel環境をDockerで構築する為の手順書
 
 # 構成
 
--PHP:7.4(php:7.4-fpm-alpine)
+| 名前 | バージョン |
+| :--- | :---: |
+| PHP | 7.4(php:7.4-fpm-alpine) |
+| MySQL | 8.0 |
+| Nginx | 1.17(nginx:1.17-alpine) |
+| Laravel | 7.* |
 
--MySQL:8.0
-
--Nginx:1.17(nginx:1.17-alpine)
-
--Laravel:7.*
-
+---
 # ローカル環境の構築(Mac)
 
 ## PHPのバージョン更新
@@ -85,7 +85,7 @@ $ mv composer.phar /usr/local/bin/composer
 $ composer --version
 Composer version 1.10.4 2020-04-09 17:05:50
 ```
-
+---
 # 開発環境構築
 
 ## プロジェクト新規作成直後に必須の作業
@@ -120,6 +120,9 @@ $ git remote -v
 origin	https://github.com/Your_Name/your_project (fetch)
 origin	https://github.com/Your_Name/your_project (push)
 ```
+
+### 注意点
+git のコミットログを初期化もしくは削除すること。もしくはリベース。
 
 ### masterとdevelopブランチをremoteにpushする。
 
@@ -159,6 +162,7 @@ $ docker-compose up -d
 
 ```
 
+---
 ## Laravelプロジェクトの新規作成
 
 dockerコンテナとマウントする為の「backend」ディレクトリはローカルで作成する。
@@ -262,6 +266,7 @@ $ php artisan migrate:refresh --seed
 $ php artisan migrate:fresh (--seed)
 ```
 
+---
 ## 認証機能作成について
 
 一度、migrate:freshなと実行しておくと良い。
@@ -654,6 +659,7 @@ abstract class Service
 
 ```
 
+---
 # その他
 
 ### テーブル作成
@@ -688,6 +694,6 @@ $ php artisan make:policy TestPolicy
 ```
 
 
-
+---
 # 補足
 

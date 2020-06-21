@@ -2,6 +2,7 @@
 
 [front_vuetify_template](https://github.com/FumihiroMaejima/front_vuetify_template)のNuxt.js+TypeScript版
 
+---
 ## Update Yarn
 
 ```
@@ -32,7 +33,7 @@ $ yarn -v
 1.21.1
 ```
 
-
+---
 ## Make Projet
 
 ### gitリポジトリそのものをフロントエンドのリポジトリにしたい場合
@@ -46,6 +47,7 @@ $ rm -rf sample
 $ yarn install
 ```
 
+---
 ## Build Setup
 
 ```bash
@@ -66,7 +68,7 @@ $ yarn generate
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
 
-
+---
 # 環境構築
 
 yarn コマンドで作成出来る。
@@ -94,8 +96,6 @@ create-nuxt-app v2.15.0
 ? Choose development tools jsconfig.json (Recommended for VS Code)
 
 ```
-
-
 
 ## envファイルの設定
 
@@ -482,7 +482,7 @@ yarnでinstallしないことに注意
 $ vue add vuetify
 ```
 
-
+---
 ## axios-mock-serverの設定
 
 ### mocksディレクトリの作成
@@ -532,9 +532,9 @@ mocks/$mock.js was built successfully.
 
 /mocks/$mock.jsファイルが作成される。
 
-### client.jsの修正
+### client.tsの修正
 
-client.jsを下記の通りに修正
+client.tsを下記の通りに修正
 
 MOCK_CLIENT_MODEに指定の文字列が設定されるとプロキシを利用せずにmockを利用したリクエストを送ることになる。
 
@@ -606,6 +606,7 @@ nuxt.config.tsの「axios」と「proxy」にそれぞれ下記の通り設定�
   },
 ```
 
+---
 ## Cookieを取得する方法
 
 cookie-universal-nuxtのインストール
@@ -637,7 +638,7 @@ cookieの取得
   this.$cookies.set('csrftoken', value);
 ```
 
-
+---
 ## SCSSの利用設定
 
 ### sass-loaderとnode-sassと@nuxtjs/style-resourcesをインストールする
@@ -667,7 +668,7 @@ module.exports = {
 import '~/assets/scss/App.scss'
 ```
 
-
+---
 ## TypeScriptのインストール
 
 ### グローバルにインストールする
@@ -695,7 +696,7 @@ $ yarn add webpack-cli
 ```
 
 
-## tsconfig.jsonに追記する事項
+### tsconfig.jsonに追記する事項
 
 随時追記する
 
@@ -706,8 +707,147 @@ $ yarn add webpack-cli
 ]
 ```
 
+---
+## Storybookの設定
 
 
+### Storybookにインストール
+
+```shell-session
+$ yarn add --dev @storybook/vue@nuxt
+
+```
+
+⇨バージョンはstable版をインストールする。
+
+
+### その他パッケージのインストール
+
+```shell-session
+$ yarn add --dev babel-preset-vue
+$ yarn add --dev core-js@2.6.10
+```
+
+### addonのインストール
+
+```shell-session
+$ yarn add --dev @storybook/addon-knobs
+$ yarn add --dev @storybook/addon-actions
+$ yarn add --dev @storybook/addon-notes
+$ yarn add --dev @storybook/addon-viewport
+$ yarn add --dev @storybook/addon-a11y
+$ yarn add --dev @storybook/addon-backgrounds
+```
+
+`addon-viewport`は現状エラーが発生する為、インストールは不要
+
+
+### Storybookのコマンド設定
+
+pasckage.jsonの`scripts`に下記の設定を追記する。
+ポート番号を変更する場合は
+
+```Json
+  "scripts": {
+    "storybook": "start-storybook -p 9100"
+  },
+```
+
+### Storybookの設定ファイルについて
+
+`/.storybookw`ディレクトリを作成し、下記のファイルを作成する。
+
+- addons.ts
+
+- config.ts
+
+- webpack.config.ts
+
+・addons.ts
+
+```TypeScript
+import '@storybook/addon-knobs/register'
+import '@storybook/addon-actions/register'
+import '@storybook/addon-notes/register'
+// import '@storybook/addon-viewport/register'
+import '@storybook/addon-a11y/register'
+import '@storybook/addon-backgrounds/register'
+
+```
+
+
+config.ts
+
+基本的な設定は下記の通り
+
+その他はVuetifyを適用する設定を行なっている。
+
+Story(サンドボックス環境)ファイルの格納場所や拡張子を変更する場合は下記を修正する。
+
+```TypeScript
+function loadStories() {
+  const req = require.context('../src/stories', true, /\.story\.ts$/)
+  req.keys().forEach(filename => req(filename))
+}
+
+configure(loadStories, module)
+```
+
+・webpack.config.ts
+
+```TypeScript
+const path = require('path')
+const rootPath = path.resolve(__dirname, '../')
+
+module.exports = ({ config }: any) => {
+
+  config.resolve.alias['~'] = rootPath
+  config.resolve.alias['@'] = rootPath
+
+  // for Typescript
+  config.module.rules.push({
+    test: /\.ts/,
+    use: [
+      {
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true
+        },
+      }
+    ],
+  })
+
+  config.module.rules.push({
+    test: /\.scss$/,
+    use: [
+      {
+        loader: 'style-loader'
+      },
+      {
+        loader: 'css-loader'
+      },
+      {
+        loader: 'sass-loader'
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            './assets/scss/*.scss',
+          ],
+          rootPath
+        }
+      },
+    ],
+  })
+
+  return config
+}
+
+```
+
+---
 ## API Blueprintの設定
 
 ### aglioのインストール

@@ -21,11 +21,11 @@ storiesOf('SnackBar', module).add(
     props: {
       text: {
         type: String,
-        default: text('text', 'test text')
+        default: text('text', 'button text')
       },
       color: {
         type: String,
-        default: select('color', [ 'green', 'red' ], '')
+        default: select('color', ['green', 'red'], 'green')
       },
       buttonColor: {
         type: String,
@@ -33,7 +33,7 @@ storiesOf('SnackBar', module).add(
       },
       time: {
         type: Number,
-        default: select('time', [5000, 8000], 5000)
+        default: select('time', [50000, 80000], 50000)
       },
       isTop: {
         type: Boolean,
