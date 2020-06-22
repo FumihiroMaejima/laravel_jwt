@@ -68,28 +68,23 @@ export default class App extends Vue {
   }
 
   created() {
-    // this.$myInjectedFunction('works in created' + this.$store.state.module.auth)
-    const token: any = this.$cookies.get('application_token') // undefined
+    this.openLoading = true
+    const token: any = this.$cookies.get('application_token')
 
     if (token === undefined) {
-      this.refreshAuthData()
-      if (this.$route.path !== '/') {
-        this.$router.push('/')
-      }
+      this.resetAction()
     }
 
     this.$base.authInstance(this.id, token).then((response) => {
       this.getAuthData(response)
 
       if (!response.id) {
-        this.refreshAuthData()
-        if (this.$route.path !== '/') {
-          this.$router.push('/')
-        }
+        this.resetAction()
       }
       /* else if (this.id) {
 
       } */
+      this.openLoading = false
     })
   }
 
@@ -100,6 +95,13 @@ export default class App extends Vue {
 
   openErrorToast(value: boolean) {
     this.$refs.toast.open = value
+  }
+
+  resetAction() {
+    this.refreshAuthData()
+    if (this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   }
 }
 </script>

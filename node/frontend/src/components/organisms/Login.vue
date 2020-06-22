@@ -45,7 +45,6 @@ export default class Login extends Vue {
   private postData!: {
     name: PostData['name']
     password: PostData['password']
-    token: PostData['token']
   }
 
   @LoginModule.Getter('name')
@@ -54,17 +53,11 @@ export default class Login extends Vue {
   @LoginModule.Getter('password')
   private password!: string
 
-  @LoginModule.Getter('token')
-  private token!: string
-
   @LoginModule.Action('getNameDataAction')
   private getNameDataAction!: (payload: PostData['name']) => {}
 
   @LoginModule.Action('getPasswordDataAction')
   private getPasswordDataAction!: (payload: PostData['password']) => {}
-
-  @LoginModule.Action('getTokenDataAction')
-  private getTokenDataAction!: (payload: PostData['token']) => {}
 
   @LoginModule.Action('refreshLoginPostAction')
   private refreshLoginPostAction!: () => {}
@@ -87,11 +80,6 @@ export default class Login extends Vue {
 
   public set passwordData(getPassword: string) {
     this.getPasswordDataAction(getPassword)
-  }
-
-  // created
-  public created() {
-    this.getTokenDataAction(this.$cookies.get('csrftoken'))
   }
 
   // methods
@@ -117,12 +105,11 @@ export default class Login extends Vue {
           'axios post data: ' +
             JSON.stringify(this.$store.state.modules.login.postData)
         )
-        console.log('axios post responce: ' + JSON.stringify(response.data))
+        console.log('axios post response: ' + JSON.stringify(response.data))
         const data = response.data
         this.getAuthData({
           id: data.user.id,
-          name: data.user.name,
-          token: data.access_token
+          name: data.user.name
         })
         this.$cookies.set('application_token', data.access_token)
 
