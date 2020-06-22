@@ -4,13 +4,11 @@ export default {
   state: {
     name: null,
     id: null,
-    token: null,
     authority: {}
   },
   getters: {
     name: (state: any) => state.name,
     id: (state: any) => state.id,
-    token: (state: any) => state.token,
     authority: (state: any) => state.authority
   },
   actions: {
@@ -19,9 +17,6 @@ export default {
     },
     refreshAuthData({ commit }: any) {
       commit('setRefreshAuthData')
-    },
-    getToken({ commit }: any, payload: string) {
-      commit('setToken', payload)
     }
   },
   mutations: {
@@ -34,12 +29,7 @@ export default {
     setRefreshAuthData(state: any) {
       state.id = null
       state.name = null
-      state.token = null
       state.authority = null
-    },
-
-    setToken(state: any, payload: string) {
-      state.token = payload
     }
   }
 }

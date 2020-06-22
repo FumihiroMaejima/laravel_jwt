@@ -631,11 +631,12 @@ nuxt.config.tsの「modules」に「'cookie-universal-nuxt'」を追記
   ],
 ```
 
-cookieの取得
+`cookieの取得、設定、削除`
 
 ```TypeScript
   this.$cookies.get('csrftoken')
-  this.$cookies.set('csrftoken', value);
+  this.$cookies.set('csrftoken', value)
+  this.$cookies.remove('csrftoken')
 ```
 
 ---

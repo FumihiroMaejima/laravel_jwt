@@ -29,14 +29,12 @@ export class Base {
     if (parseInt(response.status) !== 200) {
       return {
         id: null,
-        name: null,
-        token: null
+        name: null
       }
     } else {
       return {
         id: response.data.id,
-        name: response.data.name,
-        token: token
+        name: response.data.name
       }
     }
   }

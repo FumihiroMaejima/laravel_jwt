@@ -113,9 +113,6 @@ export default class AuthGlobalHeader extends Vue {
   @AuthModule.Getter('id')
   private id!: number
 
-  @AuthModule.Getter('token')
-  private token!: string
-
   @AuthModule.Action('refreshAuthData')
   private refreshAuthData!: () => {}
 
@@ -137,11 +134,17 @@ export default class AuthGlobalHeader extends Vue {
       .post(
         cnf.PATH_AUTH_LOGOUT,
         {},
-        { headers: this.$base.addHeaders({ id: this.id, token: this.token }) }
+        {
+          headers: this.$base.addHeaders({
+            id: this.id,
+            token: this.$cookies.get('application_token')
+          })
+        }
       )
       .then((response) => {
         console.log('axios post responce: ' + JSON.stringify(response.data))
         this.$emit('logoutEvent', false)
+        this.$cookies.remove('application_token')
         this.refreshAuthData()
         this.$router.push('/')
       })

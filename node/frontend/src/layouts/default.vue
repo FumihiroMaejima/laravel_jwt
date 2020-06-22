@@ -49,9 +49,6 @@ export default class App extends Vue {
   @AuthModule.Getter('name')
   private name!: string
 
-  @AuthModule.Getter('token')
-  private token!: string
-
   @AuthModule.Getter('authority')
   private authority!: string
 
@@ -72,11 +69,19 @@ export default class App extends Vue {
 
   created() {
     // this.$myInjectedFunction('works in created' + this.$store.state.module.auth)
+    const token: any = this.$cookies.get('application_token') // undefined
 
-    this.$base.authInstance(this.id, this.token).then((response) => {
+    if (token === undefined) {
+      this.refreshAuthData()
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
+    }
+
+    this.$base.authInstance(this.id, token).then((response) => {
       this.getAuthData(response)
 
-      if (!this.token) {
+      if (!response.id) {
         this.refreshAuthData()
         if (this.$route.path !== '/') {
           this.$router.push('/')
