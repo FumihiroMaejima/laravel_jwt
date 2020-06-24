@@ -1,14 +1,16 @@
 <template>
   <v-card class="mx-auto mt-5" width="400px">
-    <v-card-title>
-      <h1 class="display-1">ログイン</h1>
+    <v-card-title class="grey darken-4 white--text">
+      <h1 class="subtitle-1">ログインフォーム</h1>
     </v-card-title>
+    <v-divider></v-divider>
     <v-card-text>
-      <v-form>
+      <v-form ref="form" v-model="valid">
         <v-text-field
           v-model="nameData"
           prepend-icon="mdi-account-circle"
           label="ユーザ名"
+          :rules="nameRules"
         />
         <v-text-field
           v-model="passwordData"
@@ -16,9 +18,11 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           prepend-icon="mdi-lock"
           label="パスワード"
+          :rules="passRule"
           @click:append="showPassword = !showPassword"
         />
         <v-card-actions>
+          <v-spacer />
           <v-btn class="info" @click="LoginFunction">ログイン</v-btn>
         </v-card-actions>
       </v-form>
@@ -39,7 +43,19 @@ const LoginModule = namespace('modules/login')
 
 @Component
 export default class Login extends Vue {
-  private showPassword = false
+  $refs!: {
+    form: any
+  }
+
+  private valid: boolean = true
+  private nameRules: any = [
+    (v: any) => !!v || '入力してください。',
+    (v: any) => (v && v.length <= 10) || '10文字以内で入力してください。'
+  ]
+
+  private passRule: any = [(v: any) => !!v || '入力してください。']
+
+  private showPassword: boolean = false
 
   @LoginModule.State('LoginState')
   private postData!: {
@@ -97,6 +113,9 @@ export default class Login extends Vue {
   }
 
   async LoginFunction() {
+    if (!this.$refs.form.validate()) {
+      return
+    }
     this.$emit('loginEvent', true)
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
