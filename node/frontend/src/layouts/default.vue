@@ -23,6 +23,7 @@ import GlobalHeader from '@/components/_global/GlobalHeader.vue'
 import Loading from '~/components/atoms/Loading.vue'
 import SnackBar from '~/components/atoms/SnackBar.vue'
 import AuthGlobalHeader from '~/components/_global/AuthGlobalHeader.vue'
+import cnf from '~/config/config.json'
 import '~/assets/scss/App.scss'
 
 const AuthModule = namespace('module/auth')
@@ -69,7 +70,7 @@ export default class App extends Vue {
 
   created() {
     this.openLoading = true
-    const token: any = this.$cookies.get('application_token')
+    const token: any = this.$cookies.get(cnf.tokenStoreName)
 
     if (token === undefined) {
       this.resetAction()
@@ -79,11 +80,11 @@ export default class App extends Vue {
       this.getAuthData(response)
 
       if (!response.id) {
-        this.resetAction()
+        this.resetAction(true)
+      } else if (this.$route.path === '/') {
+        // 認証情報がある、かつログイン画面にアクセスした時
+        this.$router.push('/admin')
       }
-      /* else if (this.id) {
-
-      } */
       this.openLoading = false
     })
   }
@@ -97,7 +98,11 @@ export default class App extends Vue {
     this.$refs.toast.open = value
   }
 
-  resetAction() {
+  resetAction(resetCookie = false) {
+    if (resetCookie) {
+      this.$cookies.remove(cnf.tokenStoreName)
+    }
+
     this.refreshAuthData()
     if (this.$route.path !== '/') {
       this.$router.push('/')

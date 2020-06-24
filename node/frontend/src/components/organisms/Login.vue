@@ -111,7 +111,7 @@ export default class Login extends Vue {
           id: data.user.id,
           name: data.user.name
         })
-        this.$cookies.set('application_token', data.access_token)
+        this.$cookies.set(cnf.tokenStoreName, data.access_token)
 
         this.finishPostAction()
         this.$router.push('/admin')

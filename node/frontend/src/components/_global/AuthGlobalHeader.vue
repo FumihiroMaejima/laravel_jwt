@@ -137,14 +137,14 @@ export default class AuthGlobalHeader extends Vue {
         {
           headers: this.$base.addHeaders({
             id: this.id,
-            token: this.$cookies.get('application_token')
+            token: this.$cookies.get(cnf.tokenStoreName)
           })
         }
       )
       .then((response) => {
         console.log('axios post responce: ' + JSON.stringify(response.data))
         this.$emit('logoutEvent', false)
-        this.$cookies.remove('application_token')
+        this.$cookies.remove(cnf.tokenStoreName)
         this.refreshAuthData()
         this.$router.push('/')
       })

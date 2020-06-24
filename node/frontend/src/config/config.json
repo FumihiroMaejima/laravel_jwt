@@ -9,6 +9,7 @@
   "graphBoardColorRed": "red",
   "graphBoardColorPurple": "deep-purple lighten-2",
   "graphBoardColorYello": "yellow darken-1",
+  "tokenStoreName": "application_token",
   "API_PATH_USERS_USER":"/api/users/user",
   "API_PATH_LOGIN":"/api/login",
   "PATH_AUTH_LOGIN":"/api/auth/login",
