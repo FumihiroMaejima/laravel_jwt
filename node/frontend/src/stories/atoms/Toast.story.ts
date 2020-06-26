@@ -1,24 +1,32 @@
 import { addDecorator, storiesOf } from '@storybook/vue'
 import { actions } from '@storybook/addon-actions'
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs'
-import SnackBar from '~/src/components/atoms/SnackBar.vue'
+import Toast from '~/src/components/atoms/Toast.vue'
 
 addDecorator(withKnobs)
 
-storiesOf('SnackBar', module).add(
-  'default',
+storiesOf('Toast', module).add(
+  'toast',
   () => ({
-    components: { SnackBar },
+    components: { Toast },
     template: `
       <div>
-        <SnackBar
+        <Toast
+          :open="open"
           :text="text"
           :color="color"
-          ref="toast"
+          :time=time
+          :top=top
+          :right=right
+          @closeToastEvent="closeAction"
         />
       </div>
     `,
     props: {
+      open: {
+        type: Boolean,
+        default: boolean('open', true)
+      },
       text: {
         type: String,
         default: text('text', 'button text')
@@ -33,25 +41,23 @@ storiesOf('SnackBar', module).add(
       },
       time: {
         type: Number,
-        default: select('time', [50000, 80000], 50000)
+        default: select('time', [0, 5000, 8000], 5000)
       },
-      isTop: {
+      top: {
         type: Boolean,
-        default: boolean('isTop', false)
+        default: boolean('top', false)
       },
-      isRight: {
+      right: {
         type: Boolean,
-        default: boolean('isRight', false)
+        default: boolean('right', false)
       }
     },
     data() {
-      return {
-        open: true
-      }
+      return {}
     },
     methods: {
-      openData() {
-        actions('action')
+      closeAction(value) {
+        actions('action', value)
       }
     }
   }),

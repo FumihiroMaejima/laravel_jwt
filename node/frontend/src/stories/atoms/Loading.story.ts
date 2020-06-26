@@ -1,59 +1,45 @@
 import { addDecorator, storiesOf } from '@storybook/vue'
-import { actions } from '@storybook/addon-actions'
-import { withKnobs, text, select, boolean } from '@storybook/addon-knobs'
-import SnackBar from '~/src/components/atoms/SnackBar.vue'
+// import { actions } from '@storybook/addon-actions'
+import { withKnobs, select, boolean } from '@storybook/addon-knobs'
+import Loading from '~/src/components/atoms/Loading.vue'
 
 addDecorator(withKnobs)
 
-storiesOf('SnackBar', module).add(
-  'default',
+storiesOf('Loading', module).add(
+  'loading',
   () => ({
-    components: { SnackBar },
+    components: { Loading },
     template: `
       <div>
-        <SnackBar
-          :text="text"
+        <Loading
           :color="color"
-          ref="toast"
+          :open="open"
+          :size="size"
         />
       </div>
     `,
     props: {
-      text: {
-        type: String,
-        default: text('text', 'button text')
-      },
       color: {
         type: String,
-        default: select('color', ['green', 'red'], 'green')
+        default: select(
+          'color',
+          ['grey lighten-3', 'green', 'red'],
+          'grey lighten-3'
+        )
       },
-      buttonColor: {
-        type: String,
-        default: select('buttonColor', ['green', 'red'], '')
+      open: {
+        type: Boolean,
+        default: boolean('open', true)
       },
-      time: {
+      size: {
         type: Number,
-        default: select('time', [50000, 80000], 50000)
-      },
-      isTop: {
-        type: Boolean,
-        default: boolean('isTop', false)
-      },
-      isRight: {
-        type: Boolean,
-        default: boolean('isRight', false)
+        default: select('size', [64, 72, 80], 64)
       }
     },
     data() {
-      return {
-        open: true
-      }
+      return {}
     },
-    methods: {
-      openData() {
-        actions('action')
-      }
-    }
+    methods: {}
   }),
   {
     notes: `

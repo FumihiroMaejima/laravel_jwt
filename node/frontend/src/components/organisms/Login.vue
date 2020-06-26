@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator'
+import { Emit, Vue } from 'vue-property-decorator'
 import Component from 'vue-class-component'
 import { namespace } from 'vuex-class'
 import { PostData } from '~/store/types'
@@ -81,6 +81,12 @@ export default class Login extends Vue {
   @AuthModule.Action('getAuthData')
   private getAuthData!: (payload: object) => {}
 
+  @Emit()
+  public loginEvent() {}
+
+  @Emit()
+  public loginErrorEvent() {}
+
   // computed
   public get nameData(): string {
     return this.name
@@ -109,14 +115,16 @@ export default class Login extends Vue {
 
   finishPostAction() {
     this.refreshLoginPostAction()
-    this.$emit('loginEvent', false)
+    // this.$emit('loginEvent', false)
+    this.loginEvent(false)
   }
 
   async LoginFunction() {
     if (!this.$refs.form.validate()) {
       return
     }
-    this.$emit('loginEvent', true)
+    // this.$emit('loginEvent', true)
+    this.loginEvent(true)
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
@@ -138,7 +146,8 @@ export default class Login extends Vue {
       .catch((error) => {
         console.error('axios post error: ' + error)
         this.finishPostAction()
-        this.$emit('loginErrorEvent', true)
+        // this.$emit('loginErrorEvent', true)
+        this.loginErrorEvent(true)
       })
   }
 }
