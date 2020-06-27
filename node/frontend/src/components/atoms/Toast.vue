@@ -40,11 +40,13 @@ export default class Toast extends Vue {
   @Prop({ default: true })
   private right?: boolean
 
-  @Emit()
-  public closeToastEvent() {}
+  @Emit('closeToastEvent')
+  public closeToastEventTrigger(close: boolean) {
+    return close
+  }
 
   closeToast() {
-    this.closeToastEvent(true)
+    this.closeToastEventTrigger(true)
   }
 }
 </script>

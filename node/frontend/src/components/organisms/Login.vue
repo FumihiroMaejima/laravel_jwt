@@ -81,11 +81,15 @@ export default class Login extends Vue {
   @AuthModule.Action('getAuthData')
   private getAuthData!: (payload: object) => {}
 
-  @Emit()
-  public loginEvent() {}
+  @Emit('loginEvent')
+  public loginEventTrigger(execution: boolean) {
+    return execution
+  }
 
-  @Emit()
-  public loginErrorEvent() {}
+  @Emit('loginErrorEvent')
+  public loginErrorEventTrigger(isError: boolean) {
+    return isError
+  }
 
   // computed
   public get nameData(): string {
@@ -115,16 +119,15 @@ export default class Login extends Vue {
 
   finishPostAction() {
     this.refreshLoginPostAction()
-    // this.$emit('loginEvent', false)
-    this.loginEvent(false)
+    this.loginEventTrigger(false)
   }
 
   async LoginFunction() {
     if (!this.$refs.form.validate()) {
       return
     }
-    // this.$emit('loginEvent', true)
-    this.loginEvent(true)
+
+    this.loginEventTrigger(true)
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
@@ -146,8 +149,7 @@ export default class Login extends Vue {
       .catch((error) => {
         console.error('axios post error: ' + error)
         this.finishPostAction()
-        // this.$emit('loginErrorEvent', true)
-        this.loginErrorEvent(true)
+        this.loginErrorEventTrigger(true)
       })
   }
 }

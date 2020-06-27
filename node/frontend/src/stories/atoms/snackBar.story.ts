@@ -1,5 +1,5 @@
 import { addDecorator, storiesOf } from '@storybook/vue'
-import { actions } from '@storybook/addon-actions'
+// import { actions } from '@storybook/addon-actions'
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs'
 import SnackBar from '~/src/components/atoms/SnackBar.vue'
 
@@ -49,11 +49,7 @@ storiesOf('SnackBar', module).add(
         open: true
       }
     },
-    methods: {
-      openData() {
-        actions('action')
-      }
-    }
+    methods: {}
   }),
   {
     notes: `

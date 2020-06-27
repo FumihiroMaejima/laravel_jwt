@@ -1,5 +1,5 @@
 import { addDecorator, storiesOf } from '@storybook/vue'
-import { actions } from '@storybook/addon-actions'
+import { action } from '@storybook/addon-actions'
 import { withKnobs, text, select, boolean } from '@storybook/addon-knobs'
 import Toast from '~/src/components/atoms/Toast.vue'
 
@@ -56,9 +56,7 @@ storiesOf('Toast', module).add(
       return {}
     },
     methods: {
-      closeAction(value) {
-        actions('action', value)
-      }
+      closeAction: action('action result')
     }
   }),
   {
