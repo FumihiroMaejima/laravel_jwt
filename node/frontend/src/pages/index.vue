@@ -1,7 +1,12 @@
 <template>
   <v-app>
     <v-content>
-      <SnackBar ref="toast" text="Login Failured!" color="red" />
+      <Toast
+        :open="isLoginError"
+        text="Login Failuredtest!"
+        color="red"
+        @closeToastEvent="closeErrorToast"
+      />
       <Loading :open="isLoginProcess" />
       <Login
         @loginEvent="changeLoadingFlag"
@@ -15,21 +20,18 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Loading from '~/components/atoms/Loading.vue'
 import Login from '~/components/organisms/Login.vue'
-import SnackBar from '~/components/atoms/SnackBar.vue'
+import Toast from '~/components/atoms/Toast.vue'
 
 @Component({
   components: {
     Loading,
     Login,
-    SnackBar
+    Toast
   }
 })
 export default class LoginPage extends Vue {
-  $refs!: {
-    toast: SnackBar
-  }
-
   private openLoading = false
+  private isLoginError = false
 
   // computed
   public get isLoginProcess(): boolean {
@@ -42,7 +44,11 @@ export default class LoginPage extends Vue {
   }
 
   openErrorToast(value: boolean) {
-    this.$refs.toast.open = value
+    this.isLoginError = value
+  }
+
+  closeErrorToast(value: boolean) {
+    this.isLoginError = value
   }
 }
 </script>

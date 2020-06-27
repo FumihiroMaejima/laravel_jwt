@@ -5,6 +5,7 @@
     :timeout="time"
     :top="top"
     :right="right"
+    @input="checkIsActive"
   >
     {{ text }}
     <v-btn :color="buttonColor" text @click="closeToast">Close</v-btn>
@@ -17,7 +18,7 @@ import { Component, Emit, Prop, Vue } from 'vue-property-decorator'
 @Component
 export default class Toast extends Vue {
   // data
-  // public open: boolean = false
+  // private isActive: boolean = false
 
   @Prop({ default: true })
   private open!: boolean
@@ -41,12 +42,19 @@ export default class Toast extends Vue {
   private right?: boolean
 
   @Emit('closeToastEvent')
-  public closeToastEventTrigger(close: boolean) {
-    return close
+  public closeToastEventTrigger(open: boolean) {
+    return open
   }
 
   closeToast() {
-    this.closeToastEventTrigger(true)
+    this.closeToastEventTrigger(false)
+  }
+
+  checkIsActive(isActive: boolean) {
+    // 時間制限でトーストが閉じられた時に親コンポーネントのデータも更新する
+    if (!isActive) {
+      this.closeToast()
+    }
   }
 }
 </script>
