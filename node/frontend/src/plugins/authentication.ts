@@ -15,11 +15,11 @@ export default class Authentication {
     return await axios
       .post(cnf.PATH_AUTH_SELF, {}, { headers: header })
       .then(response => {
-        console.log('axios response' + JSON.stringify(response, null, 2))
+        // for check console.log('axios response' + JSON.stringify(response, null, 2))
         return { data: response.data, status: response.status}
       })
       .catch(error => {
-        console.error('axios error' + JSON.stringify(error.message, null, 2))
+        // for check console.error('axios error' + JSON.stringify(error.message, null, 2))
         return { data: error, status: error.response.status }
       })
   }

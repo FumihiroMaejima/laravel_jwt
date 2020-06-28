@@ -22,8 +22,12 @@ export default class AdminPage extends Vue {
   }
 
   // mounted
-  public mounted() {
-    this.$refs.toast.open = true
+  mounted() {
+    const obj = sessionStorage
+    if (obj && Object.prototype.hasOwnProperty.call(obj, 'loginSuccess')) {
+      sessionStorage.removeItem('loginSuccess')
+      this.$refs.toast.open = true
+    }
   }
 }
 </script>
