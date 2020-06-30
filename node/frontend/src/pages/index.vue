@@ -3,7 +3,7 @@
     <v-content>
       <Toast
         :open="isLoginError"
-        text="Login Failuredtest!"
+        text="Login Failured!"
         color="red"
         @closeToastEvent="closeErrorToast"
       />
@@ -19,8 +19,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import Loading from '~/components/atoms/Loading.vue'
-import Login from '~/components/organisms/Login.vue'
 import Toast from '~/components/atoms/Toast.vue'
+import Login from '~/components/organisms/Login.vue'
 
 @Component({
   components: {

@@ -1,7 +1,12 @@
 <template>
   <v-app>
-    <Loading :open="isLoginProcess" />
-    <SnackBar ref="toast" text="Logout Failured!" color="red" />
+    <Loading :open="LoadingProcess" />
+    <Toast
+      :open="isLogoutError"
+      text="Logout Failured!"
+      color="red"
+      @closeToastEvent="closeErrorToast"
+    />
     <AuthGlobalHeader
       v-if="UserId"
       @logoutEvent="changeLoadingFlag"
@@ -21,7 +26,7 @@ import { namespace } from 'vuex-class'
 import GlobalFooter from '~/components/_global/GlobalFooter.vue'
 import GlobalHeader from '@/components/_global/GlobalHeader.vue'
 import Loading from '~/components/atoms/Loading.vue'
-import SnackBar from '~/components/atoms/SnackBar.vue'
+import Toast from '~/components/atoms/Toast.vue'
 import AuthGlobalHeader from '~/components/_global/AuthGlobalHeader.vue'
 import cnf from '~/config/config.json'
 import '~/assets/scss/App.scss'
@@ -33,16 +38,13 @@ const AuthModule = namespace('module/auth')
     GlobalFooter,
     GlobalHeader,
     Loading,
-    SnackBar,
+    Toast,
     AuthGlobalHeader
   }
 })
 export default class App extends Vue {
-  $refs!: {
-    toast: SnackBar
-  }
-
   private openLoading = false
+  private isLogoutError = false
 
   @AuthModule.Getter('id')
   private id!: number
@@ -60,7 +62,7 @@ export default class App extends Vue {
   private refreshAuthData!: () => {}
 
   // computed
-  public get isLoginProcess(): boolean {
+  public get LoadingProcess(): boolean {
     return this.openLoading
   }
 
@@ -95,7 +97,11 @@ export default class App extends Vue {
   }
 
   openErrorToast(value: boolean) {
-    this.$refs.toast.open = value
+    this.isLogoutError = value
+  }
+
+  closeErrorToast(value: boolean) {
+    this.isLogoutError = value
   }
 
   resetAction(resetCookie = false) {
