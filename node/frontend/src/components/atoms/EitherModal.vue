@@ -5,7 +5,10 @@
     </template>
     <v-card>
       <v-card-title class="headline">{{ headerText }}</v-card-title>
-      <v-card-text class="either-modal__text" v-text="text"></v-card-text>
+      <v-divider></v-divider>
+      <v-card-text class="either-modal__text">
+        {{ text }}
+      </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red darken-1" text @click="open = false">No</v-btn>
@@ -29,8 +32,8 @@ export default class EitherModal extends Vue {
   @Prop({ default: 'add detail text.' })
   private text?: string
 
-  @Prop({ default: 290 })
-  private width?: number
+  @Prop({ default: '60%' })
+  private width?: string
 
   @Prop({
     default: (): void => {}
