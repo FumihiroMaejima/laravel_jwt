@@ -709,6 +709,47 @@ $ yarn add webpack-cli
 ```
 
 ---
+## Jestの設定
+
+`jest.config.js`の設定は下記の通り
+
+```JavaScript
+module.exports = {
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^~/(.*)$': '<rootDir>/src/$1',
+    '^vue$': 'vue/dist/vue.common.js'
+  },
+  moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.js$': 'babel-jest',
+    '.*\\.(vue)$': 'vue-jest'
+  },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/src/components/**/*.vue',
+    '<rootDir>/src/pages/**/*.vue'
+  ]
+}
+```
+
+@types/jestのインストールする
+
+```Shell-sesshion
+$ yarn add @types/jest
+```
+
+### tsconfig.jsonに設置を追記する
+
+随時追記する
+
+```Json
+"types": [
+  "@types/jest",
+]
+
+---
 ## Storybookの設定
 
 
