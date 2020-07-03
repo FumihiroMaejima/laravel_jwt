@@ -10,7 +10,7 @@
     "generate": "nuxt-ts generate",
     "start": "nuxt-ts start",
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
-    "test": "jest",
+    "test": "jest --config jest.config.js",
     "mock:build": "axios-mock-server -b",
     "mock:watch": "axios-mock-server -w",
     "storybook": "start-storybook -p 9500"
@@ -49,6 +49,7 @@
     "vuex-module-decorators": "^0.17.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.10.4",
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-backgrounds": "^5.3.19",
@@ -58,6 +59,7 @@
     "@storybook/source-loader": "^5.3.19",
     "@storybook/vue": "^5.3.19",
     "@vue/test-utils": "^1.0.0-beta.27",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
     "babel-preset-vue": "^2.0.2",
@@ -73,6 +75,6 @@
     "sass-loader": "^8.0.2",
     "stylelint": "^10.1.0",
     "ts-jest": "^25.0.0",
-    "vue-jest": "^4.0.0-0"
+    "vue-jest": "^3.0.6"
   }
 }

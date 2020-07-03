@@ -715,23 +715,32 @@ $ yarn add webpack-cli
 
 ```JavaScript
 module.exports = {
+  preset: 'ts-jest',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^~/(.*)$': '<rootDir>/src/$1',
     '^vue$': 'vue/dist/vue.common.js'
   },
   moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
+  testMatch: ['<rootDir>/test/unit/**/*.ts'],
   transform: {
     '^.+\\.ts$': 'ts-jest',
     '^.+\\.js$': 'babel-jest',
     '.*\\.(vue)$': 'vue-jest'
   },
-  collectCoverage: true,
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.json',
+    },
+  },
+  testURL: "http://localhost/",
+  collectCoverage: false, // no check coverage
   collectCoverageFrom: [
     '<rootDir>/src/components/**/*.vue',
     '<rootDir>/src/pages/**/*.vue'
   ]
 }
+
 ```
 
 @types/jestのインストールする
@@ -742,12 +751,24 @@ $ yarn add @types/jest
 
 ### tsconfig.jsonに設置を追記する
 
-随時追記する
+随時追記するo(通常のjestも)
 
 ```Json
 "types": [
   "@types/jest",
+  "jest",
 ]
+```
+
+＊2020年7月現在、下記の通りのパッケージをインストールしておく必要がある。
+
+vue-jestはベータ版をインストールしない様に注意が必要。
+
+```Shell-sesshion
+$ yarn add --dev @babel/preset-env
+$ yarn add --dev vue-jest
+$ yarn add --dev babel-core@7.0.0-bridge.0
+```
 
 ---
 ## Storybookの設定

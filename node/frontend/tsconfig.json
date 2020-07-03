@@ -27,6 +27,7 @@
     "types": [
       "vuetify",
       "@types/jest",
+      "jest",
       "@types/node",
       "@nuxt/types",
       "@nuxtjs/axios",
