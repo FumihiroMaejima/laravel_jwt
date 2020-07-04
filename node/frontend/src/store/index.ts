@@ -3,8 +3,6 @@
 import Vue from 'vue'
 import Vuex, { StoreOptions } from 'vuex'
 import { RootState } from '~/store/types'
-/* module modeの場合は不要の為コメントアウト */
-// import { login } from '~/store/modules/login/'
 
 Vue.use(Vuex)
 
@@ -13,14 +11,7 @@ const store: StoreOptions<RootState> = {
   state: {
     version: '1.0.0'
   },
-  modules: {
-    /* module modeの場合は不要の為コメントアウト */
-    // login
-  },
+  modules: {},
   mutations: {},
   actions: {}
 }
-
-// classic mode.
-// const storeInstatnce = () => new Vuex.Store<RootState>(store)
-// export default storeInstatnce

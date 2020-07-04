@@ -2,6 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 require('dotenv').config()
 
+const isProxy = process.env.MOCK_CLIENT_MODE !== 'mockClientMode'
+
 export default {
   mode: 'universal', // 'spa'
   srcDir: 'src',
@@ -33,7 +35,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/module/plugin.ts', '~/plugins/base.ts'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -49,16 +51,23 @@ export default {
    */
   modules: [
     '@nuxtjs/style-resources',
+    '@nuxtjs/proxy',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    ['cookie-universal-nuxt', { parseJSON: false }]
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    proxy: isProxy
+  },
+  proxy: {
+    '/api': 'http://localhost/'
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

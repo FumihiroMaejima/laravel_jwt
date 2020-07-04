@@ -35,7 +35,7 @@ export default class AdminUserInfo extends Vue {
 
   public created() {
     client
-      .get('/api/admin/userinfo')
+      .get(cnf.PATH_ADMIN_USERINFO)
       .then((response) => {
         console.log('axios get: ' + JSON.stringify(response.data))
       })

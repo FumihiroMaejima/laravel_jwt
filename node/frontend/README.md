@@ -2,6 +2,7 @@
 
 [front_vuetify_template](https://github.com/FumihiroMaejima/front_vuetify_template)のNuxt.js+TypeScript版
 
+---
 ## Update Yarn
 
 ```
@@ -32,7 +33,7 @@ $ yarn -v
 1.21.1
 ```
 
-
+---
 ## Make Projet
 
 ### gitリポジトリそのものをフロントエンドのリポジトリにしたい場合
@@ -46,6 +47,7 @@ $ rm -rf sample
 $ yarn install
 ```
 
+---
 ## Build Setup
 
 ```bash
@@ -66,7 +68,7 @@ $ yarn generate
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
 
-
+---
 # 環境構築
 
 yarn コマンドで作成出来る。
@@ -95,8 +97,6 @@ create-nuxt-app v2.15.0
 
 ```
 
-
-
 ## envファイルの設定
 
 プロジェクト作成時に「DotEnv」を選択すると自動的に.envが作成される。
@@ -107,21 +107,30 @@ create-nuxt-app v2.15.0
 
 # .env.local
 # NODE_ENV='local'
-# VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
+# BASE_URL=http://localhost:3030
+# VUE_APP_HEADER_TITLE='LaraJWT'
 # VUE_APP_API_URL='http://localhost/'
 # VUE_APP_BACKEND_API_DOMAIN=http://localhost
+# MOCK_CLIENT_MODE='mockClientMode'
+# DEVELOP_API_URL='http://localhost:3030/'
 
 # .env.development
 # NODE_ENV='development'
-VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
-VUE_APP_API_URL='http://localhost:3000/'
+BASE_URL=http://localhost:3030
+VUE_APP_HEADER_TITLE='LaraJWT'
+VUE_APP_API_URL='http://localhost:3030/'
 VUE_APP_BACKEND_API_DOMAIN=http://localhost
+MOCK_CLIENT_MODE='mockClientMode'
+DEVELOP_API_URL='http://localhost:3030/'
 
 # .env.prod
 # NODE_ENV='production'
-# VUE_APP_HEADER_TITLE='ADMIN TEMPLATE'
+# BASE_URL=http://localhost:3030
+# VUE_APP_HEADER_TITLE='LaraJWT'
 # VUE_APP_API_URL='http://localhost/'
 # VUE_APP_BACKEND_API_DOMAIN=http://localhost
+# MOCK_CLIENT_MODE=''
+# DEVELOP_API_URL='http://localhost:3030/'
 
 
 ```
@@ -140,6 +149,8 @@ $ yarn add axios-mock-server
 $ yarn add material-design-icons-iconfont
 $ yarn add vuex-class
 $ yarn add vue-property-decorator
+$ yarn add @nuxtjs/proxy
+$ yarn add @types/node
 ```
 
 scss系のライブラリは別途記載。
@@ -471,7 +482,7 @@ yarnでinstallしないことに注意
 $ vue add vuetify
 ```
 
-
+---
 ## axios-mock-serverの設定
 
 ### mocksディレクトリの作成
@@ -521,30 +532,119 @@ mocks/$mock.js was built successfully.
 
 /mocks/$mock.jsファイルが作成される。
 
-### client.jsの修正
+### client.tsの修正
 
-client.jsを下記の通りに修正
+client.tsを下記の通りに修正
+
+MOCK_CLIENT_MODEに指定の文字列が設定されるとプロキシを利用せずにmockを利用したリクエストを送ることになる。
 
 ```Javascript
 import axios from 'axios'
 import mock from '../mocks/$mock'
+
+let baseURL = process.env.VUE_APP_API_URL
+
 if (process.env.NODE_ENV === 'development') {
-  mock()
+  baseURL = process.env.DEVELOP_API_URL
+  if (process.env.MOCK_CLIENT_MODE === 'mockClientMode') {
+    mock()
+  }
 }
 
 const client = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: baseURL,
   responseType: 'json'
 })
 
 export default client
+
 ```
 
+### axiosのプロキシ設定
+
+プロキシを設定する為に下記をインストールする。
+
+```shell-session
+$ yarn add @types/node
+$ yarn add @nuxtjs/proxy
+```
+
+tsconfi.jsonの「types」に追記する。
+
+```Json
+  "types": [
+    "vuetify",
+    "@types/node",
+    "@nuxt/types",
+    "@nuxtjs/axios"
+  ]
+```
+
+nuxt.config.tsの「modules」に「'@nuxtjs/proxy'」を追記
+
+```TypeScript
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/proxy',
+    // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    '@nuxtjs/dotenv'
+  ],
+```
+
+nuxt.config.tsの「axios」と「proxy」にそれぞれ下記の通り設定を加える。
+
+「axios」の「proxy」キーは変数などで任意に変更出来る様にしておくと良い。
+
+```TypeScript
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/api': 'http://localhost/',
+  },
+```
+
+---
+## Cookieを取得する方法
+
+cookie-universal-nuxtのインストール
+
+```shell-session
+$ yarn add cookie-universal-nuxt
+```
+
+tsconfi.jsonの「types」に追記する。
+
+```Json
+  "types": [
+    "cookie-universal-nuxt"
+  ]
+```
+
+nuxt.config.tsの「modules」に「'cookie-universal-nuxt'」を追記
+
+```TypeScript
+  modules: [
+    ['cookie-universal-nuxt', { parseJSON: false }]
+  ],
+```
+
+`cookieの取得、設定、削除`
+
+```TypeScript
+  this.$cookies.get('csrftoken')
+  this.$cookies.set('csrftoken', value)
+  this.$cookies.remove('csrftoken')
+```
+
+---
 ## SCSSの利用設定
 
 ### sass-loaderとnode-sassと@nuxtjs/style-resourcesをインストールする
 
-```
+```shell-session
 $ yarn add --dev sass-loader
 $ yarn add --dev node-sass
 $ yarn add --dev @nuxtjs/style-resources
@@ -569,7 +669,7 @@ module.exports = {
 import '~/assets/scss/App.scss'
 ```
 
-
+---
 ## TypeScriptのインストール
 
 ### グローバルにインストールする
@@ -597,7 +697,7 @@ $ yarn add webpack-cli
 ```
 
 
-## tsconfig.jsonに追記する事項
+### tsconfig.jsonに追記する事項
 
 随時追記する
 
@@ -608,8 +708,209 @@ $ yarn add webpack-cli
 ]
 ```
 
+---
+## Jestの設定
+
+`jest.config.js`の設定は下記の通り
+
+```JavaScript
+module.exports = {
+  preset: 'ts-jest',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^~/(.*)$': '<rootDir>/src/$1',
+    '^vue$': 'vue/dist/vue.common.js'
+  },
+  moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
+  testMatch: ['<rootDir>/test/unit/**/*.ts'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.js$': 'babel-jest',
+    '.*\\.(vue)$': 'vue-jest'
+  },
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.json',
+    },
+  },
+  testURL: "http://localhost/",
+  collectCoverage: false, // no check coverage
+  collectCoverageFrom: [
+    '<rootDir>/src/components/**/*.vue',
+    '<rootDir>/src/pages/**/*.vue'
+  ]
+}
+
+```
+
+@types/jestのインストールする
+
+```Shell-sesshion
+$ yarn add @types/jest
+```
+
+### tsconfig.jsonに設置を追記する
+
+随時追記するo(通常のjestも)
+
+```Json
+"types": [
+  "@types/jest",
+  "jest",
+]
+```
+
+＊2020年7月現在、下記の通りのパッケージをインストールしておく必要がある。
+
+vue-jestはベータ版をインストールしない様に注意が必要。
+
+```Shell-sesshion
+$ yarn add --dev @babel/preset-env
+$ yarn add --dev vue-jest
+$ yarn add --dev babel-core@7.0.0-bridge.0
+```
+
+---
+## Storybookの設定
 
 
+### Storybookにインストール
+
+```shell-session
+$ yarn add --dev @storybook/vue@nuxt
+
+```
+
+⇨バージョンはstable版をインストールする。
+
+
+### その他パッケージのインストール
+
+```shell-session
+$ yarn add --dev babel-preset-vue
+$ yarn add --dev core-js@2.6.10
+```
+
+### addonのインストール
+
+```shell-session
+$ yarn add --dev @storybook/addon-knobs
+$ yarn add --dev @storybook/addon-actions
+$ yarn add --dev @storybook/addon-notes
+$ yarn add --dev @storybook/addon-viewport
+$ yarn add --dev @storybook/addon-a11y
+$ yarn add --dev @storybook/addon-backgrounds
+```
+
+`addon-viewport`は現状エラーが発生する為、インストールは不要
+
+
+### Storybookのコマンド設定
+
+pasckage.jsonの`scripts`に下記の設定を追記する。
+ポート番号を変更する場合は
+
+```Json
+  "scripts": {
+    "storybook": "start-storybook -p 9100"
+  },
+```
+
+### Storybookの設定ファイルについて
+
+`/.storybookw`ディレクトリを作成し、下記のファイルを作成する。
+
+- addons.ts
+
+- config.ts
+
+- webpack.config.ts
+
+・addons.ts
+
+```TypeScript
+import '@storybook/addon-knobs/register'
+import '@storybook/addon-actions/register'
+import '@storybook/addon-notes/register'
+// import '@storybook/addon-viewport/register'
+import '@storybook/addon-a11y/register'
+import '@storybook/addon-backgrounds/register'
+
+```
+
+
+config.ts
+
+基本的な設定は下記の通り
+
+その他はVuetifyを適用する設定を行なっている。
+
+Story(サンドボックス環境)ファイルの格納場所や拡張子を変更する場合は下記を修正する。
+
+```TypeScript
+function loadStories() {
+  const req = require.context('../src/stories', true, /\.story\.ts$/)
+  req.keys().forEach(filename => req(filename))
+}
+
+configure(loadStories, module)
+```
+
+・webpack.config.ts
+
+```TypeScript
+const path = require('path')
+const rootPath = path.resolve(__dirname, '../')
+
+module.exports = ({ config }: any) => {
+
+  config.resolve.alias['~'] = rootPath
+  config.resolve.alias['@'] = rootPath
+
+  // for Typescript
+  config.module.rules.push({
+    test: /\.ts/,
+    use: [
+      {
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true
+        },
+      }
+    ],
+  })
+
+  config.module.rules.push({
+    test: /\.scss$/,
+    use: [
+      {
+        loader: 'style-loader'
+      },
+      {
+        loader: 'css-loader'
+      },
+      {
+        loader: 'sass-loader'
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            './assets/scss/*.scss',
+          ],
+          rootPath
+        }
+      },
+    ],
+  })
+
+  return config
+}
+
+```
+
+---
 ## API Blueprintの設定
 
 ### aglioのインストール
