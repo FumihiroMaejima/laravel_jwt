@@ -68,3 +68,6 @@ mysql:
 
 circleci:
 	cd app/backend && circleci build
+
+ci:
+	circleci build
