@@ -1,14 +1,16 @@
 <template>
   <v-card class="mx-auto mt-5" width="400px">
-    <v-card-title>
-      <h1 class="display-1">ログイン</h1>
+    <v-card-title class="grey darken-4 white--text">
+      <h1 class="subtitle-1">ログインフォーム</h1>
     </v-card-title>
+    <v-divider></v-divider>
     <v-card-text>
-      <v-form>
+      <v-form ref="form" v-model="valid">
         <v-text-field
           v-model="nameData"
           prepend-icon="mdi-account-circle"
           label="ユーザ名"
+          :rules="nameRules"
         />
         <v-text-field
           v-model="passwordData"
@@ -16,9 +18,11 @@
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           prepend-icon="mdi-lock"
           label="パスワード"
+          :rules="passRule"
           @click:append="showPassword = !showPassword"
         />
         <v-card-actions>
+          <v-spacer />
           <v-btn class="info" @click="LoginFunction">ログイン</v-btn>
         </v-card-actions>
       </v-form>
@@ -27,24 +31,36 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator'
+import { Emit, Vue } from 'vue-property-decorator'
 import Component from 'vue-class-component'
 import { namespace } from 'vuex-class'
 import { PostData } from '~/store/types'
 import client from '~/client'
 import cnf from '~/config/config.json'
 
+const AuthModule = namespace('module/auth')
 const LoginModule = namespace('modules/login')
 
 @Component
 export default class Login extends Vue {
-  private showPassword = false
+  $refs!: {
+    form: any
+  }
+
+  private valid: boolean = true
+  private nameRules: any = [
+    (v: any) => !!v || '入力してください。',
+    (v: any) => (v && v.length <= 10) || '10文字以内で入力してください。'
+  ]
+
+  private passRule: any = [(v: any) => !!v || '入力してください。']
+
+  private showPassword: boolean = false
 
   @LoginModule.State('LoginState')
   private postData!: {
     name: PostData['name']
     password: PostData['password']
-    token: PostData['token']
   }
 
   @LoginModule.Getter('name')
@@ -53,17 +69,27 @@ export default class Login extends Vue {
   @LoginModule.Getter('password')
   private password!: string
 
-  @LoginModule.Getter('token')
-  private token!: string
-
   @LoginModule.Action('getNameDataAction')
   private getNameDataAction!: (payload: PostData['name']) => {}
 
   @LoginModule.Action('getPasswordDataAction')
   private getPasswordDataAction!: (payload: PostData['password']) => {}
 
-  @LoginModule.Action('getTokenDataAction')
-  private getTokenDataAction!: (payload: PostData['token']) => {}
+  @LoginModule.Action('refreshLoginPostAction')
+  private refreshLoginPostAction!: () => {}
+
+  @AuthModule.Action('getAuthData')
+  private getAuthData!: (payload: object) => {}
+
+  @Emit('loginEvent')
+  public loginEventTrigger(execution: boolean) {
+    return execution
+  }
+
+  @Emit('loginErrorEvent')
+  public loginErrorEventTrigger(isError: boolean) {
+    return isError
+  }
 
   // computed
   public get nameData(): string {
@@ -82,39 +108,6 @@ export default class Login extends Vue {
     this.getPasswordDataAction(getPassword)
   }
 
-  // created
-  public created() {
-    const self = this
-    function getToken() {
-      const stringValue = cnf.targetString
-      let randomString: string = ''
-      if (process.browser) {
-        randomString = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-          .map((num: any) => stringValue[num % stringValue.length])
-          .join('')
-      } else {
-        // SSR対応
-        randomString = Array.from(Array(16))
-          .map(
-            () => stringValue[Math.floor(Math.random() * stringValue.length)]
-          )
-          .join('')
-      }
-      self.getTokenDataAction(randomString)
-    }
-    function LoginFunction() {
-      client
-        .get('/api/users/user')
-        .then((response) => {
-          console.log('axios get responce: ' + JSON.stringify(response.data))
-        })
-        .catch((error) => {
-          console.log('axios get error: ' + error)
-        })
-    }
-    return [getToken(), LoginFunction()]
-  }
-
   // methods
   getName() {
     return this.name
@@ -124,19 +117,40 @@ export default class Login extends Vue {
     return this.password
   }
 
-  LoginFunction() {
-    client
-      .post('/api/login', this.$store.state.modules.login.postData)
+  finishPostAction() {
+    this.refreshLoginPostAction()
+    this.loginEventTrigger(false)
+  }
+
+  async LoginFunction() {
+    if (!this.$refs.form.validate()) {
+      return
+    }
+
+    this.loginEventTrigger(true)
+    await client
+      .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
         console.log(
           'axios post data: ' +
             JSON.stringify(this.$store.state.modules.login.postData)
         )
-        console.log('axios post responce: ' + JSON.stringify(response.data))
+        console.log('axios post response: ' + JSON.stringify(response.data))
+        const data = response.data
+        this.getAuthData({
+          id: data.user.id,
+          name: data.user.name
+        })
+        this.$cookies.set(cnf.tokenStoreName, data.access_token)
+        sessionStorage.setItem('loginSuccess', 'true')
+
+        this.finishPostAction()
         this.$router.push('/admin')
       })
       .catch((error) => {
-        console.log('axios post error: ' + error)
+        console.error('axios post error: ' + error)
+        this.finishPostAction()
+        this.loginErrorEventTrigger(true)
       })
   }
 }

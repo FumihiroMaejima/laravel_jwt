@@ -38,7 +38,16 @@
         </v-list>
 
         <div>
-          <v-btn block href="/">Logout</v-btn>
+          <EitherModal
+            ref="modal"
+            header-text="ログアウト確認"
+            text="ログアウトします。よろしいですか？"
+            :action="LogoutFunction"
+          >
+            <template v-slot:button>
+              <v-btn block @click="openModal">Logout</v-btn>
+            </template>
+          </EitherModal>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -82,16 +91,78 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import cnf from '~/config/authGlobal.json'
+import { Vue, Component, Emit } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
+import EitherModal from '~/components/atoms/EitherModal.vue'
+import client from '~/client'
+import authCnf from '~/config/authGlobal.json'
+import cnf from '~/config/config.json'
 
-@Component
+const AuthModule = namespace('module/auth')
+
+@Component({
+  components: {
+    EitherModal
+  }
+})
 export default class AuthGlobalHeader extends Vue {
-  public accountMenuList: object = cnf.accountMenuList
+  $refs!: {
+    modal: EitherModal
+  }
+
+  @AuthModule.Getter('id')
+  private id!: number
+
+  @AuthModule.Action('refreshAuthData')
+  private refreshAuthData!: () => {}
+
+  public accountMenuList: object = authCnf.accountMenuList
   public headerTitle: string =
     process.env.VUE_APP_HEADER_TITLE || 'ADMIN HEADER'
 
   public open = false
-  public navigationLists: object = cnf.navigationLists
+  public navigationLists: object = authCnf.navigationLists
+
+  @Emit('logoutEvent')
+  public logoutEventTrigger(execution: boolean) {
+    return execution
+  }
+
+  @Emit('logoutErrorEvent')
+  public logoutErrorEventTrigger(isError: boolean) {
+    return isError
+  }
+
+  openModal() {
+    this.$refs.modal.open = true
+  }
+
+  async LogoutFunction() {
+    this.logoutEventTrigger(true)
+    this.$refs.modal.open = false
+    await client
+      .post(
+        cnf.PATH_AUTH_LOGOUT,
+        {},
+        {
+          headers: this.$base.addHeaders({
+            id: this.id,
+            token: this.$cookies.get(cnf.tokenStoreName)
+          })
+        }
+      )
+      .then((response) => {
+        console.log('axios post responce: ' + JSON.stringify(response.data))
+        this.logoutEventTrigger(false)
+        this.$cookies.remove(cnf.tokenStoreName)
+        this.refreshAuthData()
+        this.$router.push('/')
+      })
+      .catch((error) => {
+        console.error('axios post error: ' + error)
+        this.logoutEventTrigger(false)
+        this.logoutErrorEventTrigger(true)
+      })
+  }
 }
 </script>

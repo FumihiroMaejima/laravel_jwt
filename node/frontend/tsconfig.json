@@ -26,8 +26,12 @@
     },
     "types": [
       "vuetify",
+      "@types/jest",
+      "jest",
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "cookie-universal-nuxt"
     ]
   },
   "exclude": [

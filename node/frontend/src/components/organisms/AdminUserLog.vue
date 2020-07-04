@@ -35,7 +35,7 @@ export default class AdminUserLog extends Vue {
 
   public created() {
     client
-      .get('/api/admin/userlog')
+      .get(cnf.PATH_ADMIN_USERLOG)
       .then((response) => {
         console.log('axios get: ' + JSON.stringify(response.data))
       })
