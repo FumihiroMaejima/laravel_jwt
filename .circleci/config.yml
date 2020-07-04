@@ -28,7 +28,7 @@ jobs:
           paths:
             - vendor
       - run: echo 'Cache made.'
-      - run: cd app/backend && cp php artisan key:generate
+      - run: cd app/backend && php artisan key:generate
       - run: cd app/backend && vendor/bin/phpunit --testdox
       # - run: vendor/bin/php-cs-fixer fix -v
       - run: cd app/backend && vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
