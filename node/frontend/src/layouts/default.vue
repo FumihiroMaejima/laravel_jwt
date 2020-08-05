@@ -13,9 +13,9 @@
       @logoutErrorEvent="openErrorToast"
     />
     <GlobalHeader v-else />
-    <v-content>
+    <v-main>
       <nuxt />
-    </v-content>
+    </v-main>
     <GlobalFooter />
   </v-app>
 </template>
