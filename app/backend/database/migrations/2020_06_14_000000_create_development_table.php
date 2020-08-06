@@ -20,6 +20,16 @@ class CreateDevelopmentTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('teams', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('department_id')->comment('所属部署ID')->constrained()->onDelete('cascade');
+            // $table->foreignId('user_id')->constrained('users'); // テーブル名を指定する場合
+            $table->string('name')->comment('所属チーム');
+            $table->string('code')->unique()->comment('チームコード');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -30,5 +40,6 @@ class CreateDevelopmentTable extends Migration
     public function down()
     {
         Schema::dropIfExists('department');
+        Schema::dropIfExists('teams');
     }
 }

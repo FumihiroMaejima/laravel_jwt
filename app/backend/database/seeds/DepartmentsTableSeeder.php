@@ -49,8 +49,44 @@ class DepartmentsTableSeeder extends Seeder
             'updated_at' => '2020-06-14 00:00:00'
         ]);
         DB::table('departments')->insert([
+            'name' => '法務',
+            'code' => 'legal_affairs',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
             'name' => '監査',
             'code' => 'audit',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
+            'name' => '開発',
+            'code' => 'development',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
+            'name' => 'カスタマーサポート',
+            'code' => 'customer_support',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
+            'name' => '情報セキュリティ',
+            'code' => 'information_security',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
+            'name' => '研究開発',
+            'code' => 'research_and_develop',
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('departments')->insert([
+            'name' => '事業部',
+            'code' => 'operations',
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);

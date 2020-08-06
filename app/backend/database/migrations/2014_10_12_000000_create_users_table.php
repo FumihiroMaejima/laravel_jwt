@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('department_id')->comment('所属部署ID');
+            $table->tinyInteger('team_id')->nullable()->comment('所属チームID');
             $table->tinyInteger('role')->default(0)->comment('ロール');
             $table->rememberToken();
             $table->timestamps();

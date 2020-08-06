@@ -57,6 +57,20 @@ Zend Engine v3.4.0, Copyright (c) Zend Technologies
     with Zend OPcache v7.4.4, Copyright (c), by Zend Technologies
 ```
 
+PHPのマイナーアップデートをかける場合(git等もアップデートされる。)
+
+```shell-session
+$ brew upgrade php
+
+~ $ php -v
+PHP 7.4.8 (cli) (built: Jul 30 2020 02:08:45) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.8, Copyright (c), by Zend Technologies
+```
+
+
+
 ## Composerのインストール
 
 opensslのインストール
@@ -591,7 +605,7 @@ localhost/api/auth/login
 ---
 # その他
 
-### テーブル作成
+### テーブル作成(マイグレーションファイル作成)
 
 ```shell-session
  $ php artisan make:migration create_test_table
