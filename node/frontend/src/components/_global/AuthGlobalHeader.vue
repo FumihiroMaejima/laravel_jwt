@@ -41,6 +41,7 @@
           <EitherModal
             ref="modal"
             header-text="ログアウト確認"
+            width="40%"
             text="ログアウトします。よろしいですか？"
             :action="LogoutFunction"
           >
