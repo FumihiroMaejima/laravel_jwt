@@ -623,6 +623,12 @@ localhost/api/auth/login
  $ php artisan make:seeder TestTableSeeder
 ```
 
+### ファクトリーファイル作成
+
+```shell-session
+ $ php artisan make:factory TestFactory
+```
+
 ### ポリシーの作成
 
 ```shell-session
