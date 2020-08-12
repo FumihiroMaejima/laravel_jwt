@@ -1,5 +1,5 @@
 import rootModule from './store'
-const namespace = 'module'
+const namespace = 'subModules'
 
 export default ({ store }: any) => {
   store.registerModule(namespace, rootModule)

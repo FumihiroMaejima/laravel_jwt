@@ -31,7 +31,7 @@ import AuthGlobalHeader from '~/components/_global/AuthGlobalHeader.vue'
 import cnf from '~/config/config.json'
 import '~/assets/scss/App.scss'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 
 @Component({
   components: {

@@ -99,7 +99,7 @@ import client from '~/client'
 import authCnf from '~/config/authGlobal.json'
 import cnf from '~/config/config.json'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 
 @Component({
   components: {

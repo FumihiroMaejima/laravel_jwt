@@ -38,7 +38,7 @@ import { PostData } from '~/store/types'
 import client from '~/client'
 import cnf from '~/config/config.json'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 const LoginModule = namespace('modules/login')
 
 @Component
