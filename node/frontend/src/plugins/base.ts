@@ -3,6 +3,7 @@ import Vue from 'vue'
 // import store from 'vuex'
 import router from 'vue-router'
 import Authentication from '~/plugins/authentication'
+import { AuthState, HeaderDataState } from '~/types'
 
 export class Base {
   router: any
@@ -17,14 +18,14 @@ export class Base {
     })
   }
 
-  addHeaders(data: any) {
+  addHeaders(data: HeaderDataState) {
     return {
       Authorization: `Bearer ${data.token ? data.token : ''}`,
       'X-Auth-ID': data.id ? data.id : ''
     }
   }
 
-  async authInstance(id: any, token: string) {
+  async authInstance(id: AuthState['id'], token: HeaderDataState['token']) {
     const response = await this.Auth.getUser(this.addHeaders({id: id, token: token}))
     if (parseInt(response.status) !== 200) {
       return {
