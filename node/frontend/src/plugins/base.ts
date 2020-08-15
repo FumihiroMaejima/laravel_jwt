@@ -4,6 +4,7 @@ import Vue from 'vue'
 import router from 'vue-router'
 import Authentication from '~/plugins/authentication'
 import { AuthState, HeaderDataState } from '~/types'
+import cnf from '~/config/config.json'
 
 export class Base {
   router: any
@@ -44,6 +45,7 @@ export class Base {
 // plugin
 export default ({ app }: any, inject: any) => {
   inject('base', new Base(router))
+  inject('appCnf', cnf)
 }
 
 declare module 'vue/types/vue' {
