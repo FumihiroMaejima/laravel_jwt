@@ -50,10 +50,14 @@ export default class Login extends Vue {
   private valid: boolean = true
   private nameRules: any = [
     (v: any) => !!v || '入力してください。',
+    (v: any) => this.checkWhiteSpace(v) || '1文字以上入力してください。',
     (v: any) => (v && v.length <= 10) || '10文字以内で入力してください。'
   ]
 
-  private passRule: any = [(v: any) => !!v || '入力してください。']
+  private passRule: any = [
+    (v: any) => !!v || '入力してください。',
+    (v: any) => this.checkWhiteSpace(v) || '1文字以上入力してください。'
+  ]
 
   private showPassword: boolean = false
 
@@ -152,6 +156,10 @@ export default class Login extends Vue {
         this.finishPostAction()
         this.loginErrorEventTrigger(true)
       })
+  }
+
+  checkWhiteSpace(value: string) {
+    return value.trim().length > 0
   }
 }
 </script>
