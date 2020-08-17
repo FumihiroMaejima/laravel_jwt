@@ -8,7 +8,7 @@ Laravel環境をDockerで構築する為の手順書
 | :--- | :---: |
 | PHP | 7.4(php:7.4-fpm-alpine) |
 | MySQL | 8.0 |
-| Nginx | 1.17(nginx:1.17-alpine) |
+| Nginx | 1.18(nginx:1.18-alpine) |
 | Laravel | 7.* |
 
 ---
@@ -638,11 +638,28 @@ $ php artisan make:policy TestPolicy
 「/app/Policies」ディレクトリにファイルが生成される。
 
 ### テストコードの作成
+
 ```shell-session
  $ php artisan make:test SampleTest --unit
 ```
 
-
 ---
 # 補足
 
+### backendのpackage.jsonのアップデート
+
+update対象の確認
+
+```shell-session
+$ npm audit
+```
+
+fixをかける。
+
+```shell-session
+$ npm audit fix
+```
+
+上記でアップデートが出来ない場合はマニュアルでアップデートをかける。
+
+---
