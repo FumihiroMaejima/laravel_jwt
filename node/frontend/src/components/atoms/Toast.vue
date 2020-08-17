@@ -8,7 +8,11 @@
     @input="checkIsActive"
   >
     {{ text }}
-    <v-btn :color="buttonColor" text @click="closeToast">Close</v-btn>
+    <template v-slot:action="{ attrs }">
+      <v-btn :color="buttonColor" text v-bind="attrs" @click="closeToast">
+        Close
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
 

@@ -38,7 +38,7 @@ import { PostData } from '~/store/types'
 import client from '~/client'
 import cnf from '~/config/config.json'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 const LoginModule = namespace('modules/login')
 
 @Component
@@ -50,10 +50,14 @@ export default class Login extends Vue {
   private valid: boolean = true
   private nameRules: any = [
     (v: any) => !!v || '入力してください。',
+    (v: any) => this.checkWhiteSpace(v) || '1文字以上入力してください。',
     (v: any) => (v && v.length <= 10) || '10文字以内で入力してください。'
   ]
 
-  private passRule: any = [(v: any) => !!v || '入力してください。']
+  private passRule: any = [
+    (v: any) => !!v || '入力してください。',
+    (v: any) => this.checkWhiteSpace(v) || '1文字以上入力してください。'
+  ]
 
   private showPassword: boolean = false
 
@@ -131,18 +135,13 @@ export default class Login extends Vue {
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
-        console.log(
-          'axios post data: ' +
-            JSON.stringify(this.$store.state.modules.login.postData)
-        )
-        console.log('axios post response: ' + JSON.stringify(response.data))
         const data = response.data
         this.getAuthData({
           id: data.user.id,
           name: data.user.name
         })
         this.$cookies.set(cnf.tokenStoreName, data.access_token)
-        sessionStorage.setItem('loginSuccess', 'true')
+        sessionStorage.setItem(cnf.loginSessionName, 'true')
 
         this.finishPostAction()
         this.$router.push('/admin')
@@ -152,6 +151,10 @@ export default class Login extends Vue {
         this.finishPostAction()
         this.loginErrorEventTrigger(true)
       })
+  }
+
+  checkWhiteSpace(value: string) {
+    return value.trim().length > 0
   }
 }
 </script>

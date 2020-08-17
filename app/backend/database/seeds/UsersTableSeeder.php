@@ -12,42 +12,79 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'testuser',
-            'email' => 'testuser@example.com',
-            'password' => bcrypt('testpassword'),
+            'name' => 'testadmin',
+            'email' => 'testadmin@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 9,
+            'team_id' => 4,
             'role' => 100,
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);
         DB::table('users')->insert([
-            'name' => 'subuser',
-            'email' => 'subuser@example.com',
-            'password' => bcrypt('subuserpassword'),
+            'name' => 'subadmin',
+            'email' => 'subadmin@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 9,
+            'team_id' => 4,
             'role' => 0,
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);
         DB::table('users')->insert([
-            'name' => 'business',
-            'email' => 'business@example.com',
-            'password' => bcrypt('businesspassword'),
+            'name' => 'busi',
+            'email' => 'busi@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 13,
+            'team_id' => 11,
             'role' => 50,
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);
         DB::table('users')->insert([
-            'name' => 'administrator',
-            'email' => 'administrator@example.com',
-            'password' => bcrypt('adminpassword'),
+            'name' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 13,
+            'team_id' => 12,
             'role' => 99,
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);
         DB::table('users')->insert([
-            'name' => 'system',
-            'email' => 'system@example.com',
-            'password' => bcrypt('systempassword'),
+            'name' => 'sys',
+            'email' => 'sys@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 11,
             'role' => 100,
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('users')->insert([
+            'name' => 'subuser1',
+            'email' => 'subuser1@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 1,
+            'role' => 0,
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('users')->insert([
+            'name' => 'subuser2',
+            'email' => 'subuser2@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 2,
+            'role' => 0,
+            'created_at' => '2020-06-14 00:00:00',
+            'updated_at' => '2020-06-14 00:00:00'
+        ]);
+        DB::table('users')->insert([
+            'name' => 'subuser3',
+            'email' => 'subuser3@example.com',
+            'password' => bcrypt(Config::get('local.seeder.password.testuser')),
+            'department_id' => 3,
+            'team_id' => 1,
+            'role' => 0,
             'created_at' => '2020-06-14 00:00:00',
             'updated_at' => '2020-06-14 00:00:00'
         ]);

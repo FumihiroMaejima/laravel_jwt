@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Loading :open="LoadingProcess" />
+    <ProgressLine :open="LoadingProcess" />
     <Toast
       :open="isLogoutError"
       text="Logout Failured!"
@@ -13,9 +13,9 @@
       @logoutErrorEvent="openErrorToast"
     />
     <GlobalHeader v-else />
-    <v-content>
+    <v-main v-if="!LoadingProcess">
       <nuxt />
-    </v-content>
+    </v-main>
     <GlobalFooter />
   </v-app>
 </template>
@@ -25,19 +25,19 @@ import { Vue, Component } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import GlobalFooter from '~/components/_global/GlobalFooter.vue'
 import GlobalHeader from '@/components/_global/GlobalHeader.vue'
-import Loading from '~/components/atoms/Loading.vue'
+import ProgressLine from '~/components/atoms/ProgressLine.vue'
 import Toast from '~/components/atoms/Toast.vue'
 import AuthGlobalHeader from '~/components/_global/AuthGlobalHeader.vue'
 import cnf from '~/config/config.json'
 import '~/assets/scss/App.scss'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 
 @Component({
   components: {
     GlobalFooter,
     GlobalHeader,
-    Loading,
+    ProgressLine,
     Toast,
     AuthGlobalHeader
   }

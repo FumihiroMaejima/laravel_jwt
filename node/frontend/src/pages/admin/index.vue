@@ -13,6 +13,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Toast from '~/components/atoms/Toast.vue'
 import Admin from '~/components/organisms/Admin.vue'
+import cnf from '~/config/config.json'
 
 @Component({
   components: {
@@ -26,8 +27,11 @@ export default class AdminPage extends Vue {
   // mounted
   mounted() {
     const obj = sessionStorage
-    if (obj && Object.prototype.hasOwnProperty.call(obj, 'loginSuccess')) {
-      sessionStorage.removeItem('loginSuccess')
+    if (
+      obj &&
+      Object.prototype.hasOwnProperty.call(obj, cnf.loginSessionName)
+    ) {
+      sessionStorage.removeItem(cnf.loginSessionName)
       this.openToast = true
     }
   }

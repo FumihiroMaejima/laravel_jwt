@@ -41,6 +41,7 @@
           <EitherModal
             ref="modal"
             header-text="ログアウト確認"
+            width="40%"
             text="ログアウトします。よろしいですか？"
             :action="LogoutFunction"
           >
@@ -98,7 +99,7 @@ import client from '~/client'
 import authCnf from '~/config/authGlobal.json'
 import cnf from '~/config/config.json'
 
-const AuthModule = namespace('module/auth')
+const AuthModule = namespace('subModules/auth')
 
 @Component({
   components: {
@@ -151,8 +152,7 @@ export default class AuthGlobalHeader extends Vue {
           })
         }
       )
-      .then((response) => {
-        console.log('axios post responce: ' + JSON.stringify(response.data))
+      .then(() => {
         this.logoutEventTrigger(false)
         this.$cookies.remove(cnf.tokenStoreName)
         this.refreshAuthData()

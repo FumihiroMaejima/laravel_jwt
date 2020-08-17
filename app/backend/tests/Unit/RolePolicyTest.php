@@ -33,8 +33,8 @@ class RolePolicyTest extends TestCase
     {
         $user = (object) [
             'id'                => $id,
-            'name'              => 'subuser',
-            'email'             => 'subuser@example.com',
+            'name'              => 'subadmin',
+            'email'             => 'subadmin@example.com',
             'email_verified_at' => null,
             'password'          => 'password',
             'role'              => $role,
@@ -75,8 +75,8 @@ class RolePolicyTest extends TestCase
     {
         $user = (object) [
             'id'                => $id,
-            'name'              => 'subuser',
-            'email'             => 'subuser@example.com',
+            'name'              => 'subadmin',
+            'email'             => 'subadmin@example.com',
             'email_verified_at' => null,
             'password'          => 'password',
             'role'              => $role,
@@ -118,8 +118,8 @@ class RolePolicyTest extends TestCase
     {
         $user = (object) [
             'id'                => $id,
-            'name'              => 'subuser',
-            'email'             => 'subuser@example.com',
+            'name'              => 'subadmin',
+            'email'             => 'subadmin@example.com',
             'email_verified_at' => null,
             'password'          => 'password',
             'role'              => $role,
@@ -160,8 +160,8 @@ class RolePolicyTest extends TestCase
     {
         $user = (object) [
             'id'                => $id,
-            'name'              => 'subuser',
-            'email'             => 'subuser@example.com',
+            'name'              => 'subadmin',
+            'email'             => 'subadmin@example.com',
             'email_verified_at' => null,
             'password'          => 'password',
             'role'              => $role,
