@@ -135,11 +135,6 @@ export default class Login extends Vue {
     await client
       .post(cnf.PATH_AUTH_LOGIN, this.$store.state.modules.login.postData)
       .then((response) => {
-        console.log(
-          'axios post data: ' +
-            JSON.stringify(this.$store.state.modules.login.postData)
-        )
-        console.log('axios post response: ' + JSON.stringify(response.data))
         const data = response.data
         this.getAuthData({
           id: data.user.id,

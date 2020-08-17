@@ -152,8 +152,7 @@ export default class AuthGlobalHeader extends Vue {
           })
         }
       )
-      .then((response) => {
-        console.log('axios post responce: ' + JSON.stringify(response.data))
+      .then(() => {
         this.logoutEventTrigger(false)
         this.$cookies.remove(cnf.tokenStoreName)
         this.refreshAuthData()

@@ -16,7 +16,6 @@ export default class Authentication {
     return await axios
       .post(cnf.PATH_AUTH_SELF, {}, { headers: header })
       .then(response => {
-        // for check console.log('axios response' + JSON.stringify(response, null, 2))
         return { data: response.data, status: response.status}
       })
       .catch(error => {
