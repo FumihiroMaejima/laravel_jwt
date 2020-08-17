@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12-stretch-browsers-legacy
+        environment:
+          APP_ENV: circleci
+          APP_DEBUG: true
+    working_directory: ~/frontend
+    steps:
+      - checkout
+      - run: echo 'Hello Node!'
+      - run: echo 'This is Node.js Environmental'
+      - run: echo 'apt install start'
+      - restore_cache:
+          keys: yarn-v1-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: echo 'Cache made.'
+      - run: yarn build
+      - run: echo 'start unit test .'
+      - run: yarn test
