@@ -1,6 +1,7 @@
 /* eslint-disable */
 import axios from 'axios'
 import cnf from '~/config/config.json'
+import { BaseAddHeaderResponse } from '~/types'
 
 export default class Authentication {
   options: any
@@ -10,12 +11,11 @@ export default class Authentication {
     // this.$opt = Object.assign()
   }
 
-  async getUser(header: object) {
+  async getUser(header: BaseAddHeaderResponse) {
     axios.defaults.withCredentials = true
     return await axios
       .post(cnf.PATH_AUTH_SELF, {}, { headers: header })
       .then(response => {
-        // for check console.log('axios response' + JSON.stringify(response, null, 2))
         return { data: response.data, status: response.status}
       })
       .catch(error => {

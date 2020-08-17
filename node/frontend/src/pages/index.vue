@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <Toast
         :open="isLoginError"
         text="Login Failured!"
@@ -12,7 +12,7 @@
         @loginEvent="changeLoadingFlag"
         @loginErrorEvent="openErrorToast"
       />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

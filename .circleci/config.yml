@@ -32,5 +32,5 @@ jobs:
       - run: cd app/backend && vendor/bin/phpunit --testdox
       # - run: vendor/bin/php-cs-fixer fix -v
       - run: cd app/backend && vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
-      - run: cd app/backend && vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor,app/Console
+      - run: cd app/backend && vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor,app/Console, database/seed
 

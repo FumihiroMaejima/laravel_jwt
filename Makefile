@@ -52,7 +52,7 @@ phpcs:
 	docker-compose exec app vendor/bin/phpcs --standard=phpcs.xml --extensions=php .
 
 phpmd:
-	docker-compose exec app vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor,app/Console
+	docker-compose exec app vendor/bin/phpmd . text ruleset.xml --suffixes php --exclude node_modules,resources,storage,vendor,app/Console, database/seeds
 
 nginx-t:
 	docker-compose exec nginx ash -c 'nginx -t'
