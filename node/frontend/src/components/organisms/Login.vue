@@ -146,7 +146,7 @@ export default class Login extends Vue {
           name: data.user.name
         })
         this.$cookies.set(cnf.tokenStoreName, data.access_token)
-        sessionStorage.setItem('loginSuccess', 'true')
+        sessionStorage.setItem(cnf.loginSessionName, 'true')
 
         this.finishPostAction()
         this.$router.push('/admin')
