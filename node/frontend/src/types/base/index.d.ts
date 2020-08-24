@@ -1,10 +1,9 @@
-/* root */
-export interface HeaderDataState {
+export type HeaderDataState = {
   id: number | null
   token: string | null
 }
 
-export interface BaseAddHeaderResponse {
+export type BaseAddHeaderResponse = {
   Authorization: string
   'X-Auth-ID': number | string
 }
