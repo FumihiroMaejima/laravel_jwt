@@ -29,3 +29,13 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth:api'], function () {
     Route::post('refresh', 'Users\AuthController@refresh');
     Route::post('self', 'Users\AuthController@getAuthUser');
 });
+
+Route::group(['prefix' => 'auth-admins'], function () {
+    Route::post('login', 'Admins\AuthController@login');
+});
+
+Route::group(['prefix' => 'auth-admins', 'middleware' => 'auth:api-admins'], function () {
+    Route::post('logout', 'Admins\AuthController@logout');
+    Route::post('refresh', 'Admins\AuthController@refresh');
+    Route::post('self', 'Admins\AuthController@getAuthUser');
+});
