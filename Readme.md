@@ -623,6 +623,8 @@ localhost/api/auth/login
  $ php artisan make:seeder TestTableSeeder
 ```
 
+シーディングが出来ない場合、`composer dump-autoload`をかけると良い。
+
 ### ファクトリーファイル作成
 
 ```shell-session

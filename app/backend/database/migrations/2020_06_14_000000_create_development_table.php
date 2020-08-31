@@ -33,10 +33,25 @@ class CreateDevelopmentTable extends Migration
             $table->softDeletes();
         });
 
+        // 管理者テーブル
+        Schema::create('admins', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->tinyInteger('department_id')->comment('所属部署ID');
+            $table->tinyInteger('team_id')->nullable()->comment('所属チームID');
+            $table->tinyInteger('role')->default(0)->comment('ロール');
+            $table->rememberToken();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         // 管理者ログテーブル
         Schema::create('admin_log', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->comment('管理者ID')->constrained();
+            $table->foreignId('admin_id')->comment('管理者ID')->constrained();
             $table->string('path')->comment('リクエストURL');
             $table->string('method')->comment('リクエストメソッド');
             $table->tinyInteger('status')->comment('ステータスコード');
@@ -56,5 +71,7 @@ class CreateDevelopmentTable extends Migration
     {
         Schema::dropIfExists('department');
         Schema::dropIfExists('teams');
+        Schema::dropIfExists('admin_log');
+        Schema::dropIfExists('admins');
     }
 }
