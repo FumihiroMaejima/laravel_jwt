@@ -33,6 +33,9 @@ seed:
 tinker:
 	docker-compose exec app php artisan tinker
 
+dump-autoload:
+	docker-compose exec app composer dump-autoload
+
 cache-clear:
 	docker-compose exec app php artisan cache:clear
 
